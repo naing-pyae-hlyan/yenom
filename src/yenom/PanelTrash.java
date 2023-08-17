@@ -1,10 +1,10 @@
 package yenom;
 
 import java.awt.Font;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
 
 public class PanelTrash extends JPanel {
 
@@ -14,7 +14,7 @@ public class PanelTrash extends JPanel {
 	 * Create the panel.
 	 */
 	public PanelTrash() {
-		setBounds(0, 0, 862, 572);
+		setBounds(6, 0, 862, 572);
 		setLayout(null);
  
 
@@ -23,6 +23,8 @@ public class PanelTrash extends JPanel {
 		lblTrash.setBounds(6, 286, 862, 42);
 		lblTrash.setFont(new Font("JetBrains Mono", Font.PLAIN, 30));
 		add(lblTrash);
+
+
 	}
 
 }

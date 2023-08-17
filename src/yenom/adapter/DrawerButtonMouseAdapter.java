@@ -1,12 +1,10 @@
 package yenom.adapter;
 
-import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JPanel;
 
-public  class DrawerButtonMouseAdapter extends MouseAdapter {
+public class DrawerButtonMouseAdapter extends MouseAdapter {
 	JPanel panel;
 
 	public DrawerButtonMouseAdapter(JPanel panel) {
@@ -15,27 +13,29 @@ public  class DrawerButtonMouseAdapter extends MouseAdapter {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		panel.setBackground(Color.pink);
-		
+		System.out.println("Entered");
+		panel.setBackground(MyColors.hoverColor());
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		panel.setBackground(new Color(238, 238, 238));
+		System.out.println("Exited");
+		panel.setBackground(MyColors.primaryColor());
 
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		panel.setBackground(new Color(248, 130, 120));
+		System.out.println("Pressed");
+		panel.setBackground(MyColors.secondaryColor());
 
-	} 
+	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-//		panel.setBackground(Color.pink);
-
+		System.out.println("Released");
+		panel.setBackground(MyColors.secondaryColor());
 	}
 
 }

@@ -2,10 +2,16 @@ package yenom;
 
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.JLabel;
 
-import java.awt.Color;
+import javax.swing.JLabel;
 import java.awt.Font;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import yenom.adapter.*;
 
 public class PanelDashboard extends JPanel {
 
@@ -15,13 +21,23 @@ public class PanelDashboard extends JPanel {
 	 * Create the panel.
 	 */
 	public PanelDashboard() {
-		setBounds(0, 0, 862, 572);
+		setBounds(6, 0, 862, 572);
 		setLayout(null);
-		
+
 		JLabel lblDashboard = new JLabel("Dashboard");
-		lblDashboard.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDashboard.setBounds(6, 286, 862, 42);
-		lblDashboard.setFont(new Font("JetBrains Mono", Font.PLAIN, 30));
+		lblDashboard.setHorizontalAlignment(SwingConstants.LEFT);
+		lblDashboard.setBounds(6, 0, 850, 42);
+		lblDashboard.setFont(new Font("JetBrains Mono", Font.PLAIN, 24));
 		add(lblDashboard);
-	} 
+
+		JButton btnNewButton = new JButton("Transaction");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setBounds(664, 489, 167, 61);
+		btnNewButton.setIcon(new ImageIcon(MyIcons.logo_add));
+		btnNewButton.setFont(new Font("JetBrains Mono", Font.PLAIN, 16));
+		add(btnNewButton);
+	}
 }
