@@ -1,14 +1,14 @@
 package yenom;
 
 import java.awt.EventQueue;
-import java.awt.Image;
 import java.awt.event.MouseEvent;
-
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 
-import yenom.adapter.*;
+import adapter.DrawerButtonMouseAdapter;
+import database.DatabaseHelper;
+import utils.*;
 
 public class Home extends JFrame {
 
@@ -47,6 +47,7 @@ public class Home extends JFrame {
 				try {
 					Home frame = new Home();
 					frame.setVisible(true);
+					DatabaseHelper.connect();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -1,6 +1,7 @@
 package yenom;
 
 import java.awt.Font;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;

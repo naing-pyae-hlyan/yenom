@@ -1,10 +1,10 @@
-package yenom.adapter;
+package utils;
 
 import java.awt.Color;
 
 public class MyColors {
 	public static Color primaryColor() {
-		return new Color(38, 138, 138);
+		return new Color(38, 138, 138);   
 	}
 
 	public static Color hoverColor() {
@@ -14,4 +14,6 @@ public class MyColors {
 	public static Color secondaryColor() {
 		return new Color(238, 238, 238);
 	}
+	
+
 }

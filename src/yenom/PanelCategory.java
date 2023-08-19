@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import yenom.adapter.*;
+import utils.*;
 
 public class PanelCategory extends JPanel {
 
