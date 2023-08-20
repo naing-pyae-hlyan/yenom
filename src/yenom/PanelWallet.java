@@ -42,6 +42,7 @@ public class PanelWallet extends JPanel {
 	private JScrollPane scrollPane;
 
 	private Color selectedColor = Color.white;
+	private WalletModel selectedWM = null;
 
 	/**
 	 * Create the panel.
@@ -108,12 +109,16 @@ public class PanelWallet extends JPanel {
 		btnDeleteButton.setIcon(new ImageIcon(MyIcons.logo_delete_48));
 		add(btnDeleteButton);
 
-		scrollPane.addMouseListener(new MouseAdapter() {
+		listWallet.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int index = scrollPane.getVerticalScrollBar().getValue();
-				System.out.println(index);
-				txtWalletName.setText(String.valueOf(index));
+				int index = listWallet.locationToIndex(e.getPoint());
+				selectedWM = listWallet.getModel().getElementAt(index);
+				if (selectedWM != null) {
+					txtWalletName.setText(selectedWM.getName());
+					selectedColor = new Color(selectedWM.getColor());
+					selectedColorPanel.setBackground(selectedColor);
+				}
 			}
 		});
 
@@ -121,8 +126,8 @@ public class PanelWallet extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Color color = JColorChooser.showDialog(btnColorButton, "Choose", getBackground());
 				if (color != null) {
-					selectedColorPanel.setBackground(color);
 					selectedColor = color;
+					selectedColorPanel.setBackground(color);
 				}
 			}
 		});
@@ -143,6 +148,7 @@ public class PanelWallet extends JPanel {
 
 		btnDeleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				deleteWallet(selectedWM);
 			}
 		});
 
@@ -190,6 +196,31 @@ public class PanelWallet extends JPanel {
 			DbHelper.printSQLException(ee);
 		}
 
+		// refresh the wallet list
+		listWallet.setListData(getWallets());
+
+		// Clear wallet name text field
+		txtWalletName.setText("");
+		// Clear wallet color panel
+		selectedColor = Color.white;
+		selectedColorPanel.setBackground(Color.white);
+	}
+
+	private void deleteWallet(WalletModel wm) {
+		if (wm == null) {
+			JOptionPane.showMessageDialog(this, "Please select wallet", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		String sql = "DELETE FROM wallet WHERE id = ?";
+		try {
+			Connection connection = DbHelper.connection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, wm.getId());
+			statement.executeUpdate();
+
+		} catch (SQLException ee) {
+			DbHelper.printSQLException(ee);
+		}
 		// refresh the wallet list
 		listWallet.setListData(getWallets());
 
