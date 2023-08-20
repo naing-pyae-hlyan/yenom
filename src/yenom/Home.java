@@ -1,13 +1,14 @@
 package yenom;
 
 import java.awt.EventQueue;
+
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 
 import adapter.DrawerButtonMouseAdapter;
-import database.DatabaseHelper;
+import database.DbHelper;
 import utils.*;
 
 public class Home extends JFrame {
@@ -47,7 +48,7 @@ public class Home extends JFrame {
 				try {
 					Home frame = new Home();
 					frame.setVisible(true);
-					DatabaseHelper.connect();
+					DbHelper.connect();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -97,13 +98,6 @@ public class Home extends JFrame {
 		 */
 
 		drawerDashboard = new JPanel();
-		drawerDashboard.addMouseListener(new DrawerButtonMouseAdapter(drawerDashboard) {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(dashboard);
-				whenClickedMenuChangeMenuBackgroundColor(drawerDashboard);
-			}
-		});
 		drawerDashboard.setBounds(0, 105, drawerWidth, 42);
 		drawerDashboard.setBackground(MyColors.primaryColor());
 		drawerDashboard.setLayout(null);
@@ -125,13 +119,6 @@ public class Home extends JFrame {
 		 */
 
 		drawerTransactions = new JPanel();
-		drawerTransactions.addMouseListener(new DrawerButtonMouseAdapter(drawerTransactions) {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(transaction);
-				whenClickedMenuChangeMenuBackgroundColor(drawerTransactions);
-			}
-		});
 		drawerTransactions.setBounds(0, 147, drawerWidth, 42);
 		drawerTransactions.setBackground(MyColors.primaryColor());
 		drawerTransactions.setLayout(null);
@@ -153,13 +140,6 @@ public class Home extends JFrame {
 		 */
 
 		drawerCategories = new JPanel();
-		drawerCategories.addMouseListener(new DrawerButtonMouseAdapter(drawerCategories) {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(category);
-				whenClickedMenuChangeMenuBackgroundColor(drawerCategories);
-			}
-		});
 		drawerCategories.setBounds(0, 189, drawerWidth, 42);
 		drawerCategories.setBackground(MyColors.primaryColor());
 		drawerCategories.setLayout(null);
@@ -181,13 +161,6 @@ public class Home extends JFrame {
 		 */
 
 		drawerWallets = new JPanel();
-		drawerWallets.addMouseListener(new DrawerButtonMouseAdapter(drawerWallets) {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(wallet);
-				whenClickedMenuChangeMenuBackgroundColor(drawerWallets);
-			}
-		});
 		drawerWallets.setBounds(0, 231, drawerWidth, 42);
 		drawerWallets.setBackground(MyColors.primaryColor());
 		drawerWallets.setLayout(null);
@@ -209,13 +182,6 @@ public class Home extends JFrame {
 		 */
 
 		drawerTrash = new JPanel();
-		drawerTrash.addMouseListener(new DrawerButtonMouseAdapter(drawerTrash) {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(trash);
-				whenClickedMenuChangeMenuBackgroundColor(drawerTrash);
-			}
-		});
 		drawerTrash.setBounds(0, 273, drawerWidth, 42);
 		drawerTrash.setBackground(MyColors.primaryColor());
 		drawerTrash.setLayout(null);
@@ -237,13 +203,6 @@ public class Home extends JFrame {
 		 */
 
 		drawerSettings = new JPanel();
-		drawerSettings.addMouseListener(new DrawerButtonMouseAdapter(drawerSettings) {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(setting);
-				whenClickedMenuChangeMenuBackgroundColor(drawerSettings);
-			}
-		});
 		drawerSettings.setBounds(0, 315, drawerWidth, 42);
 		drawerSettings.setBackground(MyColors.primaryColor());
 		drawerSettings.setLayout(null);
@@ -281,6 +240,54 @@ public class Home extends JFrame {
 		whenClickedMenuChangeMenuBackgroundColor(drawerDashboard);
 
 		selectedPanelViewer = dashboard;
+
+		drawerDashboard.addMouseListener(new DrawerButtonMouseAdapter(drawerDashboard) {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				whenClickedMenuShowThePanel(dashboard);
+				whenClickedMenuChangeMenuBackgroundColor(drawerDashboard);
+			}
+		});
+
+		drawerTransactions.addMouseListener(new DrawerButtonMouseAdapter(drawerTransactions) {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				whenClickedMenuShowThePanel(transaction);
+				whenClickedMenuChangeMenuBackgroundColor(drawerTransactions);
+			}
+		});
+
+		drawerCategories.addMouseListener(new DrawerButtonMouseAdapter(drawerCategories) {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				whenClickedMenuShowThePanel(category);
+				whenClickedMenuChangeMenuBackgroundColor(drawerCategories);
+			}
+		});
+
+		drawerWallets.addMouseListener(new DrawerButtonMouseAdapter(drawerWallets) {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				whenClickedMenuShowThePanel(wallet);
+				whenClickedMenuChangeMenuBackgroundColor(drawerWallets);
+			}
+		});
+
+		drawerTrash.addMouseListener(new DrawerButtonMouseAdapter(drawerTrash) {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				whenClickedMenuShowThePanel(trash);
+				whenClickedMenuChangeMenuBackgroundColor(drawerTrash);
+			}
+		});
+
+		drawerSettings.addMouseListener(new DrawerButtonMouseAdapter(drawerSettings) {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				whenClickedMenuShowThePanel(setting);
+				whenClickedMenuChangeMenuBackgroundColor(drawerSettings);
+			}
+		});
 	}
 
 	public void whenClickedMenuShowThePanel(JPanel panel) {
@@ -306,8 +313,8 @@ public class Home extends JFrame {
 		drawerWallets.setBackground(MyColors.primaryColor());
 		drawerTrash.setBackground(MyColors.primaryColor());
 		drawerSettings.setBackground(MyColors.primaryColor());
-		
-		System.out.println("Clicked");
+
+//		System.out.println("Clicked");
 
 		panel.setBackground(MyColors.secondaryColor());
 	}

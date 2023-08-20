@@ -2,6 +2,7 @@ package yenom;
 
 import javax.swing.JPanel;
 
+
 import javax.swing.SwingConstants;
 
 import javax.swing.JLabel;
@@ -13,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import utils.*;
-import database.DatabaseHelper;
 
 public class PanelDashboard extends JPanel {
 
@@ -35,7 +35,7 @@ public class PanelDashboard extends JPanel {
 		JButton btnNewButton = new JButton("Transaction");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DatabaseHelper dbHelper = new DatabaseHelper();
+
 			}
 		});
 		btnNewButton.setBounds(664, 489, 167, 61);

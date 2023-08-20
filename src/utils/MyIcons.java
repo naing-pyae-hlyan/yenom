@@ -35,14 +35,17 @@ public class MyIcons {
 	public static final Image logo_delete = new ImageIcon(Home.class.getResource("/res/delete.png")).getImage()
 			.getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 
-	public static final Image logo_add_64 = new ImageIcon(Home.class.getResource("/res/add.png")).getImage()
-			.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+	public static final Image logo_add_48 = new ImageIcon(Home.class.getResource("/res/add2.png")).getImage()
+			.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
 
-	public static final Image logo_update_64 = new ImageIcon(Home.class.getResource("/res/update.png")).getImage()
-			.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+	public static final Image logo_update_48 = new ImageIcon(Home.class.getResource("/res/update2.png")).getImage()
+			.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
 
-	public static final Image logo_delete_64 = new ImageIcon(Home.class.getResource("/res/delete.png")).getImage()
-			.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+	public static final Image logo_delete_48 = new ImageIcon(Home.class.getResource("/res/delete2.png")).getImage()
+			.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+	
+	public static final Image logo_color_48 = new ImageIcon(Home.class.getResource("/res/colors.png")).getImage()
+			.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
 
 	public static final Image logo_wallets_64 = new ImageIcon(Home.class.getResource("/res/wallets.png")).getImage()
 			.getScaledInstance(64, 64, Image.SCALE_SMOOTH);

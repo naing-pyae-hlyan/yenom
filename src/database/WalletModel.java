@@ -3,11 +3,11 @@ package database;
 public class WalletModel {
 	private int id;
 	private String name;
-	private String color;
+	private int color;
 	private int totalIncome;
 	private int totalExpense;
 
-	public WalletModel(int id, String name, String color, int totalIncome, int totalExpense) {
+	public WalletModel(int id, String name, int color, int totalIncome, int totalExpense) {
 		super();
 		this.setId(id);
 		this.setName(name);
@@ -32,11 +32,11 @@ public class WalletModel {
 		this.name = name;
 	}
 
-	public String getColor() {
+	public int getColor() {
 		return color;
 	}
 
-	public void setColor(String color) {
+	public void setColor(int color) {
 		this.color = color;
 	}
 
