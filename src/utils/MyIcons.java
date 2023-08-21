@@ -43,11 +43,14 @@ public class MyIcons {
 
 	public static final Image logo_delete_48 = new ImageIcon(Home.class.getResource("/res/delete2.png")).getImage()
 			.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
-	
+
 	public static final Image logo_color_48 = new ImageIcon(Home.class.getResource("/res/colors.png")).getImage()
 			.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
 
 	public static final Image logo_wallets_64 = new ImageIcon(Home.class.getResource("/res/wallets.png")).getImage()
 			.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+
+	public static final Image logo_categories_64 = new ImageIcon(Home.class.getResource("/res/categories.png"))
+			.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
 
 }

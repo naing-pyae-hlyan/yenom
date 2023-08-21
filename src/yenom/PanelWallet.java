@@ -143,6 +143,9 @@ public class PanelWallet extends JPanel {
 
 		btnUpdateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String name = txtWalletName.getText();
+				int color = selectedColor.getRGB();
+				updateWallet(selectedWM, name, color);
 			}
 		});
 
@@ -204,6 +207,33 @@ public class PanelWallet extends JPanel {
 		// Clear wallet color panel
 		selectedColor = Color.white;
 		selectedColorPanel.setBackground(Color.white);
+	}
+
+	private void updateWallet(WalletModel wm, String name, int color) {
+		if (wm == null) {
+			JOptionPane.showMessageDialog(this, "Please select wallet", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		String sql = "UPDATE wallet SET name = ?, color = ? WHERE id = ?";
+		try {
+			Connection connection = DbHelper.connection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			statement.setInt(2, color);
+			statement.setInt(3, wm.getId());
+			statement.executeUpdate();
+
+		} catch (SQLException ee) {
+			DbHelper.printSQLException(ee);
+		}
+		// refresh the wallet list
+		listWallet.setListData(getWallets());
+		// Clear wallet name text field
+		txtWalletName.setText("");
+		// Clear wallet color panel
+		selectedColor = Color.white;
+		selectedColorPanel.setBackground(Color.white);
+
 	}
 
 	private void deleteWallet(WalletModel wm) {
