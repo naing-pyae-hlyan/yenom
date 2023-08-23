@@ -47,7 +47,7 @@ public class PanelCategory extends JPanel {
 	private JRadioButton radioBtnIncome;
 
 	private Color selectedColor = Color.white;
-	private WalletModel selectedWM = null;
+	private CategoryModel selectedCM = null;
 	private EIEnum eiEnum = EIEnum.expense;
 
 	/**
@@ -134,13 +134,14 @@ public class PanelCategory extends JPanel {
 		listCategory.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-//				int index = listCategory.locationToIndex(e.getPoint());
-//				selectedWM = listCategory.getModel().getElementAt(index);
-//				if (selectedWM != null) {
-//					txtWalletName.setText(selectedWM.getName());
-//					selectedColor = new Color(selectedWM.getColor());
-//					selectedColorPanel.setBackground(selectedColor);
-//				}
+				System.out.println("Clicked");
+				int index = listCategory.locationToIndex(e.getPoint());
+				selectedCM = listCategory.getModel().getElementAt(index);
+				if (selectedCM != null) {
+					txtCategoryName.setText(selectedCM.getName());
+					selectedColor = new Color(selectedCM.getColor());
+					selectedColorPanel.setBackground(selectedColor);
+				}
 			}
 		});
 
@@ -225,6 +226,23 @@ public class PanelCategory extends JPanel {
 			JOptionPane.showMessageDialog(this, "Please enter category name", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+
+		if (new String(name).equals(selectedCM.getName())) {
+			JOptionPane.showMessageDialog(this, "Please enter new category name", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+
+
+		for (int i = 0, l = listCategory.getModel().getSize(); i < l; i++) {
+			CategoryModel categoryModel = listCategory.getModel().getElementAt(i);
+			if (new String(name).equals(categoryModel.getName())) {
+				JOptionPane.showMessageDialog(this, "Please enter new category name", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		}
+
 		String sql = "INSERT INTO category (name, color, is_income) VALUES (?, ?, ?)";
 		try {
 			Connection connection = DbHelper.connection();

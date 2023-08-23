@@ -185,6 +185,21 @@ public class PanelWallet extends JPanel {
 			JOptionPane.showMessageDialog(this, "Please enter wallet name", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+
+		// checked for selected value is same as new wallet
+		if (new String(name).equals(selectedWM.getName())) {
+			JOptionPane.showMessageDialog(this, "Please enter new wallet name", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		for (int i = 0, l = listWallet.getModel().getSize(); i < l; i++) {
+			WalletModel walletModel = listWallet.getModel().getElementAt(i);
+			if (new String(name).equals(walletModel.getName())) {
+				JOptionPane.showMessageDialog(this, "Please enter new wallet name", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		}
+
 		String sql = "INSERT INTO wallet (name, color, total_income, total_expense) VALUES (?, ?, ?, ?)";
 		try {
 

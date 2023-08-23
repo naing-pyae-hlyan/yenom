@@ -8,6 +8,9 @@ import java.sql.SQLException;
 //import java.sql.ResultSet;
 //import java.sql.Statement;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 public class DbHelper {
 	private static final String URL = "jdbc:mysql://localhost:3306/yenom_db";
 	private static final String USERNAME = "root";
@@ -99,6 +102,7 @@ public class DbHelper {
 					System.out.println("Cause: " + t);
 					t = t.getCause();
 				}
+				JOptionPane.showMessageDialog(new JPanel(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
