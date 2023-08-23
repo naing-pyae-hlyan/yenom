@@ -182,20 +182,21 @@ public class PanelWallet extends JPanel {
 
 	private void addWallet(String name, int color) {
 		if (name.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Please enter wallet name", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Please enter wallet name!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		// checked for selected value is same as new wallet
-		if (new String(name).equals(selectedWM.getName())) {
-			JOptionPane.showMessageDialog(this, "Please enter new wallet name", "Error", JOptionPane.ERROR_MESSAGE);
+		if (selectedWM != null && new String(name).equals(selectedWM.getName())) {
+			JOptionPane.showMessageDialog(this, "Please enter new wallet name!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		for (int i = 0, l = listWallet.getModel().getSize(); i < l; i++) {
 			WalletModel walletModel = listWallet.getModel().getElementAt(i);
 			if (new String(name).equals(walletModel.getName())) {
-				JOptionPane.showMessageDialog(this, "Please enter new wallet name", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Please enter new wallet name!", "Error",
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 		}
@@ -226,7 +227,7 @@ public class PanelWallet extends JPanel {
 
 	private void updateWallet(WalletModel wm, String name, int color) {
 		if (wm == null) {
-			JOptionPane.showMessageDialog(this, "Please select wallet", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Please select wallet!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		String sql = "UPDATE wallet SET name = ?, color = ? WHERE id = ?";
@@ -253,7 +254,7 @@ public class PanelWallet extends JPanel {
 
 	private void deleteWallet(WalletModel wm) {
 		if (wm == null) {
-			JOptionPane.showMessageDialog(this, "Please select wallet", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Please select wallet!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		String sql = "DELETE FROM wallet WHERE id = ?";

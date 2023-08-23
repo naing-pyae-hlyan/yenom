@@ -134,13 +134,16 @@ public class PanelCategory extends JPanel {
 		listCategory.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Clicked");
 				int index = listCategory.locationToIndex(e.getPoint());
 				selectedCM = listCategory.getModel().getElementAt(index);
 				if (selectedCM != null) {
 					txtCategoryName.setText(selectedCM.getName());
 					selectedColor = new Color(selectedCM.getColor());
 					selectedColorPanel.setBackground(selectedColor);
+					final boolean isIncome = selectedCM.isIncome();
+					eiEnum = isIncome ? EIEnum.income : EIEnum.expense;
+					radioBtnIncome.setSelected(isIncome);
+					radioBtnExpense.setSelected(!isIncome);
 				}
 			}
 		});
@@ -167,7 +170,6 @@ public class PanelCategory extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				eiEnum = EIEnum.income;
-
 			}
 		});
 
@@ -176,7 +178,7 @@ public class PanelCategory extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String name = txtCategoryName.getText();
 				int color = selectedColor.getRGB();
-				boolean isIncome = eiEnum == EIEnum.income;
+				boolean isIncome = eiEnum == EIEnum.income ? true : false;
 				addCategory(name, color, isIncome);
 			}
 		});
@@ -186,13 +188,15 @@ public class PanelCategory extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String name = txtCategoryName.getText();
 				int color = selectedColor.getRGB();
-//				updateWallet(selectedWM, name, color);
+				boolean isIncome = eiEnum == EIEnum.income ? true : false;
+				updateCategory(selectedCM, name, color, isIncome);
 			}
 		});
 
 		btnDeleteButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				deleteCategory(selectedCM);
 			}
 		});
 	}
@@ -223,21 +227,19 @@ public class PanelCategory extends JPanel {
 
 	private void addCategory(String name, int color, boolean isIncome) {
 		if (name.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Please enter category name", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Please enter category name!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
-		if (new String(name).equals(selectedCM.getName())) {
-			JOptionPane.showMessageDialog(this, "Please enter new category name", "Error", JOptionPane.ERROR_MESSAGE);
+		if (selectedCM != null && new String(name).equals(selectedCM.getName())) {
+			JOptionPane.showMessageDialog(this, "Please enter new category name!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
-
 
 		for (int i = 0, l = listCategory.getModel().getSize(); i < l; i++) {
 			CategoryModel categoryModel = listCategory.getModel().getElementAt(i);
 			if (new String(name).equals(categoryModel.getName())) {
-				JOptionPane.showMessageDialog(this, "Please enter new category name", "Error",
+				JOptionPane.showMessageDialog(this, "Please enter new category name!", "Error",
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
@@ -262,7 +264,59 @@ public class PanelCategory extends JPanel {
 		txtCategoryName.setText("");
 		selectedColor = Color.white;
 		selectedColorPanel.setBackground(Color.white);
+	}
 
+	private void updateCategory(CategoryModel wm, String name, int color, boolean isIncome) {
+		if (wm == null) {
+			JOptionPane.showMessageDialog(this, "Please select category!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		String sql = "UPDATE category SET name = ?, color = ?, is_income = ? WHERE id = ?";
+		try {
+			Connection connection = DbHelper.connection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			statement.setInt(2, color);
+			statement.setBoolean(3, isIncome);
+			statement.setInt(4, wm.getId());
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			DbHelper.printSQLException(e);
+		}
+		// refresh the wallet list
+		listCategory.setListData(getCategories());
+		// Clear wallet name text field
+		txtCategoryName.setText("");
+		// Clear wallet color panel
+		selectedColor = Color.white;
+		selectedColorPanel.setBackground(Color.white);
+
+	}
+
+	private void deleteCategory(CategoryModel wm) {
+		if (wm == null) {
+			JOptionPane.showMessageDialog(this, "Please select category!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		String sql = "DELETE FROM category WHERE id = ?";
+		try {
+			Connection connection = DbHelper.connection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, wm.getId());
+			statement.executeUpdate();
+
+		} catch (SQLException ee) {
+			DbHelper.printSQLException(ee);
+		}
+		// refresh the wallet list
+		listCategory.setListData(getCategories());
+
+		// Clear wallet name text field
+		txtCategoryName.setText("");
+		// Clear wallet color panel
+		selectedColor = Color.white;
+		selectedColorPanel.setBackground(Color.white);
 	}
 
 	public class WalletRenderer extends JPanel implements ListCellRenderer<CategoryModel> {
