@@ -16,28 +16,28 @@ public class DrawerButtonMouseAdapter extends MouseAdapter {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 //		System.out.println("Entered");
-		panel.setBackground(MyColors.hoverColor());
+//		panel.setBackground(MyColors.hoverColor());
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 //		System.out.println("Exited");
-		panel.setBackground(MyColors.primaryColor());
+//		panel.setBackground(MyColors.primaryColor());
 
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 //		System.out.println("Pressed");
-		panel.setBackground(MyColors.secondaryColor());
+//		panel.setBackground(MyColors.secondaryColor());
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 //		System.out.println("Released");
-		panel.setBackground(MyColors.secondaryColor());
+//		panel.setBackground(MyColors.secondaryColor());
 	}
 
 }

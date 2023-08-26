@@ -24,5 +24,4 @@ public class PanelTransaction extends JPanel {
 		setLayout(null);  
 
 	}
-
 }
