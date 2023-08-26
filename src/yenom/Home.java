@@ -13,9 +13,9 @@ import utils.*;
 
 public class Home extends JFrame {
 
-	private int drawerWidth = 212;
-
 	private static final long serialVersionUID = 1L;
+
+	private int drawerWidth = 212;
 
 	private JPanel selectedPanelViewer;
 
@@ -76,7 +76,7 @@ public class Home extends JFrame {
 		category = new PanelCategory();
 		wallet = new PanelWallet();
 		trash = new PanelTrash();
-		setting = new PanelSetting();
+		setting = new PanelSetting();;
 
 		/*
 		 * Menu
@@ -227,7 +227,7 @@ public class Home extends JFrame {
 		panelViewer.setBounds(212, 0, 862, 572);
 		contentPanel.add(panelViewer);
 		panelViewer.setLayout(null);
-
+//
 		panelViewer.add(dashboard);
 		panelViewer.add(transaction);
 		panelViewer.add(category);
@@ -235,66 +235,58 @@ public class Home extends JFrame {
 		panelViewer.add(trash);
 		panelViewer.add(setting);
 
-		whenClickedMenuShowThePanel(dashboard);
-
-		whenClickedMenuChangeMenuBackgroundColor(drawerDashboard);
 
 		selectedPanelViewer = dashboard;
+		whenClickedMenuShowThePanel(dashboard, drawerDashboard);
 
 		drawerDashboard.addMouseListener(new DrawerButtonMouseAdapter(drawerDashboard) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(dashboard);
-				whenClickedMenuChangeMenuBackgroundColor(drawerDashboard);
+				whenClickedMenuShowThePanel(dashboard, drawerDashboard);
 			}
 		});
 
 		drawerTransactions.addMouseListener(new DrawerButtonMouseAdapter(drawerTransactions) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(transaction);
-				whenClickedMenuChangeMenuBackgroundColor(drawerTransactions);
+				whenClickedMenuShowThePanel(transaction, drawerTransactions);
 			}
 		});
 
 		drawerCategories.addMouseListener(new DrawerButtonMouseAdapter(drawerCategories) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(category);
-				whenClickedMenuChangeMenuBackgroundColor(drawerCategories);
+				whenClickedMenuShowThePanel(category, drawerCategories);
 			}
 		});
 
 		drawerWallets.addMouseListener(new DrawerButtonMouseAdapter(drawerWallets) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(wallet);
-				whenClickedMenuChangeMenuBackgroundColor(drawerWallets);
+				whenClickedMenuShowThePanel(wallet, drawerWallets);
 			}
 		});
 
 		drawerTrash.addMouseListener(new DrawerButtonMouseAdapter(drawerTrash) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(trash);
-				whenClickedMenuChangeMenuBackgroundColor(drawerTrash);
+				whenClickedMenuShowThePanel(trash, drawerTrash);
 			}
 		});
 
 		drawerSettings.addMouseListener(new DrawerButtonMouseAdapter(drawerSettings) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenClickedMenuShowThePanel(setting);
-				whenClickedMenuChangeMenuBackgroundColor(drawerSettings);
+				whenClickedMenuShowThePanel(setting, drawerSettings);
 			}
 		});
 	}
 
-	public void whenClickedMenuShowThePanel(JPanel panel) {
-		if (selectedPanelViewer == panel) {
+	private void whenClickedMenuShowThePanel(JPanel drawer, JPanel menu) {
+		if (selectedPanelViewer == drawer) {
 			return;
 		}
-		selectedPanelViewer = panel;
+		selectedPanelViewer = drawer;
 
 		dashboard.setVisible(false);
 		transaction.setVisible(false);
@@ -303,18 +295,19 @@ public class Home extends JFrame {
 		trash.setVisible(false);
 		setting.setVisible(false);
 
-		panel.setVisible(true);
+		drawer.setVisible(true);
+
+
+		whenClickedMenuChangeMenuBackgroundColor(menu);
 	}
 
-	public void whenClickedMenuChangeMenuBackgroundColor(JPanel panel) {
+	private void whenClickedMenuChangeMenuBackgroundColor(JPanel panel) {
 		drawerDashboard.setBackground(MyColors.primaryColor());
 		drawerTransactions.setBackground(MyColors.primaryColor());
 		drawerCategories.setBackground(MyColors.primaryColor());
 		drawerWallets.setBackground(MyColors.primaryColor());
 		drawerTrash.setBackground(MyColors.primaryColor());
 		drawerSettings.setBackground(MyColors.primaryColor());
-
-//		System.out.println("Clicked");
 
 		panel.setBackground(MyColors.secondaryColor());
 	}
