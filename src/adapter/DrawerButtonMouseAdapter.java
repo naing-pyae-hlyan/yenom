@@ -9,7 +9,7 @@ import utils.MyColors;
 public class DrawerButtonMouseAdapter extends MouseAdapter {
 	JPanel panel;
 
-	public DrawerButtonMouseAdapter(JPanel panel) {
+	public DrawerButtonMouseAdapter(JPanel panel) {  
 		this.panel = panel;
 	}
 

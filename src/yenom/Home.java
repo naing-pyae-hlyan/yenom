@@ -105,8 +105,8 @@ public class Home extends JFrame {
 
 		JLabel lblDashboard = new JLabel("Dashboard");
 		lblDashboard.setBounds(52, 6, 142, 30);
-		lblDashboard.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
-		drawerDashboard.add(lblDashboard);
+		lblDashboard.setFont(new Font("Default", Font.PLAIN, 13));
+		drawerDashboard.add(lblDashboard);  
 
 		JLabel lblDashboardLogo = new JLabel("");
 		lblDashboardLogo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -125,7 +125,7 @@ public class Home extends JFrame {
 		panelDrawer.add(drawerTransactions);
 
 		JLabel lblTransactions = new JLabel("Transactions");
-		lblTransactions.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		lblTransactions.setFont(new Font("Default", Font.PLAIN, 13));
 		lblTransactions.setBounds(52, 6, 142, 30);
 		drawerTransactions.add(lblTransactions);
 
@@ -146,7 +146,7 @@ public class Home extends JFrame {
 		panelDrawer.add(drawerCategories);
 
 		JLabel lblCategories = new JLabel("Categories");
-		lblCategories.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		lblCategories.setFont(new Font("Default", Font.PLAIN, 13));
 		lblCategories.setBounds(52, 6, 142, 30);
 		drawerCategories.add(lblCategories);
 
@@ -167,7 +167,7 @@ public class Home extends JFrame {
 		panelDrawer.add(drawerWallets);
 
 		JLabel lblWallets = new JLabel("Wallets");
-		lblWallets.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		lblWallets.setFont(new Font("Default", Font.PLAIN, 13));
 		lblWallets.setBounds(52, 6, 142, 30);
 		drawerWallets.add(lblWallets);
 
@@ -188,7 +188,7 @@ public class Home extends JFrame {
 		panelDrawer.add(drawerTrash);
 
 		JLabel lblTrash = new JLabel("Trash");
-		lblTrash.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		lblTrash.setFont(new Font("Default", Font.PLAIN, 13));
 		lblTrash.setBounds(52, 6, 142, 30);
 		drawerTrash.add(lblTrash);
 
@@ -209,7 +209,7 @@ public class Home extends JFrame {
 		panelDrawer.add(drawerSettings);
 
 		JLabel lblSettings = new JLabel("Settings");
-		lblSettings.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		lblSettings.setFont(new Font("Default", Font.PLAIN, 13));
 		lblSettings.setBounds(52, 6, 142, 30);
 		drawerSettings.add(lblSettings);
 

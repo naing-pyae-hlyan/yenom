@@ -1,11 +1,7 @@
 package yenom;
 
-import java.awt.BorderLayout;
-
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -25,13 +21,14 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.JTextField;
 
 import utils.*;
 import database.*;
-import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.JTextField;
+import yenom.widgets.*;
+
 
 public class PanelWallet extends JPanel {
 
@@ -63,24 +60,24 @@ public class PanelWallet extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("Manage Wallet");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 24));
+		lblNewLabel.setFont(new Font("Default", Font.PLAIN, 24));
 		lblNewLabel.setBounds(531, 6, 237, 33);
 		add(lblNewLabel);
 
 		JLabel lblTextField = new JLabel("Wallet Name *");
-		lblTextField.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		lblTextField.setFont(new Font("Default", Font.PLAIN, 13));
 		lblTextField.setBounds(505, 148, 114, 16);
 		add(lblTextField);
 
 		txtWalletName = new JTextField("");
-		txtWalletName.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		txtWalletName.setFont(new Font("Default", Font.PLAIN, 13));
 		txtWalletName.setHorizontalAlignment(SwingConstants.LEFT);
 		txtWalletName.setBounds(503, 176, 292, 64);
 		add(txtWalletName);
 		txtWalletName.setColumns(10);
 
 		JLabel lblTextfield2 = new JLabel("Wallet Color");
-		lblTextfield2.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		lblTextfield2.setFont(new Font("Default", Font.PLAIN, 13));
 		lblTextfield2.setBounds(505, 264, 114, 16);
 		add(lblTextfield2);
 
@@ -275,47 +272,5 @@ public class PanelWallet extends JPanel {
 		// Clear wallet color panel
 		selectedColor = Color.white;
 		selectedColorPanel.setBackground(Color.white);
-	}
-
-	public class WalletRenderer extends JPanel implements ListCellRenderer<WalletModel> {
-
-		private static final long serialVersionUID = 1L;
-
-		private JLabel lblIcon = new JLabel();
-		private JLabel lblName = new JLabel();
-
-		public WalletRenderer() {
-			setLayout(new BorderLayout(0, 0));
-
-			JPanel panel = new JPanel(new GridLayout(0, 1));
-			panel.add(lblName);
-			add(lblIcon, BorderLayout.WEST);
-			add(panel, BorderLayout.CENTER);
-
-		}
-
-		@Override
-		public Component getListCellRendererComponent(JList<? extends WalletModel> list, WalletModel value, int index,
-				boolean isSelected, boolean cellHasFocus) {
-			lblIcon.setIcon(new ImageIcon(MyIcons.logo_wallets_64));
-			lblName.setFont(new Font("JetBrains Mono", Font.PLAIN, 24));
-			lblName.setText(value.getName());
-
-			lblName.setOpaque(true);
-			lblIcon.setOpaque(true);
-
-			if (isSelected) {
-				lblName.setBackground(MyColors.primaryColor());
-				lblIcon.setBackground(MyColors.primaryColor());
-				setBackground(MyColors.primaryColor());
-			} else {
-				lblName.setBackground(Color.white);
-				lblIcon.setBackground(Color.white);
-				setBackground(Color.white);
-			}
-
-			return this;
-		}
-
 	}
 }

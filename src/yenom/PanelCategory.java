@@ -1,11 +1,8 @@
 package yenom;
 
-import java.awt.BorderLayout;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -27,14 +24,14 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
-import utils.*;
-import database.*;
 import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
+
+import utils.*;
+import database.*;
+import yenom.widgets.*;
 
 public class PanelCategory extends JPanel {
 
@@ -60,7 +57,7 @@ public class PanelCategory extends JPanel {
 		listCategory = new JList<>();
 		listCategory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		// set WalletRender for custom widget
-		listCategory.setCellRenderer(new WalletRenderer());
+		listCategory.setCellRenderer(new CategoryRenderer());
 		listCategory.setListData(getCategories());
 
 		scrollPane = new JScrollPane(listCategory); // load wallet list
@@ -69,24 +66,24 @@ public class PanelCategory extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("Manage Category");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 24));
+		lblNewLabel.setFont(new Font("Default", Font.PLAIN, 24));
 		lblNewLabel.setBounds(531, 6, 237, 33);
 		add(lblNewLabel);
 
 		JLabel lblTextField = new JLabel("Category Name *");
-		lblTextField.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		lblTextField.setFont(new Font("Default", Font.PLAIN, 13));
 		lblTextField.setBounds(503, 79, 159, 16);
 		add(lblTextField);
 
 		txtCategoryName = new JTextField("");
-		txtCategoryName.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		txtCategoryName.setFont(new Font("Default", Font.PLAIN, 13));
 		txtCategoryName.setHorizontalAlignment(SwingConstants.LEFT);
 		txtCategoryName.setBounds(503, 107, 292, 64);
 		add(txtCategoryName);
 		txtCategoryName.setColumns(10);
 
 		JLabel lblTextfield2 = new JLabel("Category Color");
-		lblTextfield2.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+		lblTextfield2.setFont(new Font("Default", Font.PLAIN, 13));
 		lblTextfield2.setBounds(503, 183, 114, 16);
 		add(lblTextfield2);
 
@@ -319,52 +316,6 @@ public class PanelCategory extends JPanel {
 		selectedColorPanel.setBackground(Color.white);
 	}
 
-	public class WalletRenderer extends JPanel implements ListCellRenderer<CategoryModel> {
-
-		private static final long serialVersionUID = 1L;
-
-		private JLabel lblIcon = new JLabel();
-		private JLabel lblSpacer = new JLabel();
-		private JLabel lblName = new JLabel();
-
-		public WalletRenderer() {
-			setLayout(new BorderLayout(0, 0));
-
-			JPanel panel = new JPanel(new GridLayout(0, 1));
-			panel.add(lblName);
-
-			add(lblIcon, BorderLayout.WEST);
-			add(lblSpacer);
-			add(panel, BorderLayout.CENTER);
-
-		}
-
-		@Override
-		public Component getListCellRendererComponent(JList<? extends CategoryModel> list, CategoryModel value,
-				int index, boolean isSelected, boolean cellHasFocus) {
-			lblIcon.setIcon(new ImageIcon(MyIcons.logo_categories_64));
-			lblSpacer.setText("   ");
-			lblName.setFont(new Font("JetBrains Mono", Font.PLAIN, 24));
-			lblName.setText(value.getName());
-
-			lblName.setOpaque(true);
-			lblSpacer.setOpaque(true);
-			lblIcon.setOpaque(true);
-
-			if (isSelected) {
-				lblName.setBackground(MyColors.primaryColor());
-				lblIcon.setBackground(MyColors.primaryColor());
-				setBackground(MyColors.primaryColor());
-			} else {
-				lblName.setBackground(Color.white);
-				lblIcon.setBackground(Color.white);
-				setBackground(Color.white);
-			}
-
-			return this;
-		}
-
-	}
 
 	enum EIEnum {
 		expense, income
