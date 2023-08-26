@@ -1,6 +1,5 @@
 package yenom;
 
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -30,10 +29,11 @@ import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 
 import utils.*;
+import widgets.CategoryRenderer;
 import database.*;
-import yenom.widgets.*;
+import widgets.*;
 
-public class PanelCategory extends JPanel {
+public class PanelCategory extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JList<CategoryModel> listCategory;
@@ -51,6 +51,20 @@ public class PanelCategory extends JPanel {
 	 * Create the panel.
 	 */
 	public PanelCategory() {
+
+	}
+
+	@Override
+	public void disposeUi() {
+		setVisible(false);
+
+	}
+
+	@Override
+	public void createUi() {
+		setVisible(true);
+		System.out.println("PanelCategory createUI");
+
 		setBounds(6, 0, 862, 564);
 		setLayout(null);
 
@@ -315,7 +329,6 @@ public class PanelCategory extends JPanel {
 		selectedColor = Color.white;
 		selectedColorPanel.setBackground(Color.white);
 	}
-
 
 	enum EIEnum {
 		expense, income

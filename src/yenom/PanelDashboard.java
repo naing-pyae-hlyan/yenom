@@ -2,7 +2,6 @@ package yenom;
 
 import javax.swing.JPanel;
 
-
 import javax.swing.SwingConstants;
 
 import javax.swing.JLabel;
@@ -14,15 +13,28 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import utils.*;
+import widgets.*;
 
-public class PanelDashboard extends JPanel {
+public class PanelDashboard extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	@Override
+	public void disposeUi() {
+		setVisible(false);
+	}
 
 	/**
 	 * Create the panel.
 	 */
 	public PanelDashboard() {
+
+	}
+
+	@Override
+	public void createUi() {
+		setVisible(true);
+		System.out.println("PanelDashboard createUI");
 		setBounds(6, 0, 862, 572);
 		setLayout(null);
 

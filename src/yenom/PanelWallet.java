@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -27,10 +28,9 @@ import javax.swing.JTextField;
 
 import utils.*;
 import database.*;
-import yenom.widgets.*;
+import widgets.*;
 
-
-public class PanelWallet extends JPanel {
+public class PanelWallet extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JList<WalletModel> listWallet;
@@ -41,10 +41,26 @@ public class PanelWallet extends JPanel {
 	private Color selectedColor = Color.white;
 	private WalletModel selectedWM = null;
 
-	/**
-	 * Create the panel.
-	 */
 	public PanelWallet() {
+
+	}
+
+	@Override
+	public void disposeUi() {
+		listWallet = null;
+		selectedColorPanel = null;
+		txtWalletName = null;
+		scrollPane = null;
+		selectedColor = Color.white;
+		selectedWM = null;
+		setVisible(false);
+		System.out.println("PanelWallet : disposeUi()");
+	}
+
+	@Override
+	public void createUi() {
+		System.out.println("PanelWallet : createUi()");
+		setVisible(true);
 		setBounds(6, 0, 862, 564);
 		setLayout(null);
 
@@ -273,4 +289,5 @@ public class PanelWallet extends JPanel {
 		selectedColor = Color.white;
 		selectedColorPanel.setBackground(Color.white);
 	}
+
 }

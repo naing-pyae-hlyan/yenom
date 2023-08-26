@@ -11,8 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import utils.*;
+import widgets.*;
 
-public class PanelTransaction extends JPanel {
+public class PanelTransaction extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,8 +21,20 @@ public class PanelTransaction extends JPanel {
 	 * Create the panel.
 	 */
 	public PanelTransaction() {
-		setBounds(6, 0, 862, 564);
-		setLayout(null);  
 
+	}
+
+	@Override
+	public void disposeUi() {
+		setVisible(false);
+	}
+
+	@Override
+	public void createUi() {
+		setVisible(true);
+		System.out.println("PanelTransaction createUI");
+		System.out.println("PanelTransaction");
+		setBounds(6, 0, 862, 564);
+		setLayout(null);
 	}
 }

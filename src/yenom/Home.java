@@ -1,17 +1,20 @@
 package yenom;
 
 import java.awt.EventQueue;
+
 import java.awt.event.MouseEvent;
+import java.awt.BorderLayout;
 
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 import adapter.DrawerButtonMouseAdapter;
 import database.DbHelper;
 import utils.*;
-import java.awt.BorderLayout;
+import widgets.*;
 
 public class Home extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -47,6 +50,9 @@ public class Home extends JFrame {
 				try {
 					Home frame = new Home();
 					frame.setTitle("Yenom-Project");
+					// Get the screen size of computer
+//					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//					frame.setSize(screenSize);
 //					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					frame.setVisible(true);
 					DbHelper.connect();
@@ -218,20 +224,18 @@ public class Home extends JFrame {
 
 	}
 
-	private void whenMenuItemisClicked(JPanel leftPanelItem, JPanel rightPanel) {
+	private void whenMenuItemisClicked(JPanel leftPanelItem, BaseJPanel rightPanel) {
 		if (selectedLeftPanelName == leftPanelItem.getName())
 			return;
 		selectedLeftPanelName = leftPanelItem.getName();
-		
-		panelDashboard.setVisible(false);
-		panelTransaction.setVisible(false);
-		panelCategory.setVisible(false);
-		panelWallet.setVisible(false);
-		
-		rightPanel.setVisible(true);
-		
-		
-		
+
+		panelDashboard.disposeUi();
+		panelTransaction.disposeUi();
+		panelCategory.disposeUi();
+		panelWallet.disposeUi();
+
+		rightPanel.createUi();
+
 		leftDashboard.setBackground(MyColors.primaryColor());
 		leftTransactions.setBackground(MyColors.primaryColor());
 		leftCategories.setBackground(MyColors.primaryColor());

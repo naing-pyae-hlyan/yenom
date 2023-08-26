@@ -1,4 +1,4 @@
-package yenom.widgets;
+package widgets;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,32 +11,31 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import database.*;
+import database.WalletModel;
 import utils.MyColors;
 import utils.MyIcons;
 import java.awt.FlowLayout;
 
-public class CategoryRenderer extends JPanel implements ListCellRenderer<CategoryModel> {
+public class WalletRenderer extends JPanel implements ListCellRenderer<WalletModel> {
 
 	private static final long serialVersionUID = 1L;
 
 	private JLabel lblName;
 	private JPanel panelColor;
-	private JLabel lblChoGyi;
 
 	/**
 	 * Create the panel.
 	 */
-	public CategoryRenderer() {
+	public WalletRenderer() {
 		setLayout(new BorderLayout(0, 0));
 
 		JLabel lblIcon = new JLabel("");
-		lblIcon.setIcon(new ImageIcon(MyIcons.logo_categories_24));
+		lblIcon.setIcon(new ImageIcon(MyIcons.logo_wallets_24));
 		add(lblIcon, BorderLayout.WEST);
 
 		lblName = new JLabel("");
-		lblName.setFont(new Font("Default", Font.PLAIN, 16));
-
+		lblName.setFont(new Font("JetBrains Mono", Font.PLAIN, 16));
+		
 		add(lblName, BorderLayout.CENTER);
 
 		panelColor = new JPanel();
@@ -44,17 +43,12 @@ public class CategoryRenderer extends JPanel implements ListCellRenderer<Categor
 		flowLayout.setHgap(HEIGHT);
 		add(panelColor, BorderLayout.SOUTH);
 
-		lblChoGyi = new JLabel("");
-		lblChoGyi.setFont(new Font("Default", Font.PLAIN, 16));
-		add(lblChoGyi, BorderLayout.NORTH);
-
 	}
 
 	@Override
-	public Component getListCellRendererComponent(JList<? extends CategoryModel> list, CategoryModel value, int index,
+	public Component getListCellRendererComponent(JList<? extends WalletModel> list, WalletModel value, int index,
 			boolean isSelected, boolean cellHasFocus) {
 
-		lblChoGyi.setText(value.isIncome() ? "Income" : "Expense");
 		lblName.setText("	" + value.getName());
 		panelColor.setBackground(new Color(value.getColor()));
 
@@ -67,7 +61,7 @@ public class CategoryRenderer extends JPanel implements ListCellRenderer<Categor
 			lblName.setBackground(Color.white);
 			setBackground(Color.white);
 		}
-
+		
 		return this;
 	}
 
