@@ -54,7 +54,6 @@ public class WalletRenderer extends JPanel implements ListCellRenderer<WalletMod
 	public Component getListCellRendererComponent(JList<? extends WalletModel> list, WalletModel value, int index,
 			boolean isSelected, boolean cellHasFocus) {
 //		child.setBorder(BorderFactory.createLineBorder(new Color(value.getColor()), 2));
-
 		lblName.setText("	" + value.getName());
 		lblName.setOpaque(true);
 

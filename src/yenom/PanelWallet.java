@@ -42,7 +42,7 @@ public class PanelWallet extends BaseJPanel {
 	private WalletModel selectedWM = null;
 
 	public PanelWallet() {
-
+//		createUi();
 	}
 
 	@Override
@@ -125,7 +125,13 @@ public class PanelWallet extends BaseJPanel {
 		listWallet.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (listWallet.isSelectionEmpty()) {
+					return;
+				}
 				int index = listWallet.locationToIndex(e.getPoint());
+				if (index < 0) {
+					return;
+				}
 				selectedWM = listWallet.getModel().getElementAt(index);
 				if (selectedWM != null) {
 					txtWalletName.setText(selectedWM.getName());
