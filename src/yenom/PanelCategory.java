@@ -29,14 +29,13 @@ import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 
 import utils.*;
-import widgets.CategoryRenderer;
 import database.*;
-import widgets.*;
+import renderer.*;
 
 public class PanelCategory extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JList<CategoryModel> listCategory;
+	private JList<CategoryModel> listViewCategory;
 	private JPanel selectedColorPanel;
 	private JTextField txtCategoryName;
 	private JScrollPane scrollPane;
@@ -56,13 +55,13 @@ public class PanelCategory extends BaseJPanel {
 
 	@Override
 	public void disposeUi() {
-		listCategory = null;
+		listViewCategory = null;
 		selectedColorPanel = null;
 		txtCategoryName = null;
 		scrollPane = null;
 		radioBtnExpense = null;
 		radioBtnIncome = null;
-		selectedColor  = Color.white;
+		selectedColor = Color.white;
 		selectedCM = null;
 		eiEnum = EIEnum.expense;
 		setVisible(false);
@@ -76,13 +75,13 @@ public class PanelCategory extends BaseJPanel {
 		setBounds(6, 0, 862, 564);
 		setLayout(null);
 
-		listCategory = new JList<>();
-		listCategory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listViewCategory = new JList<>();
+		listViewCategory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		// set WalletRender for custom widget
-		listCategory.setCellRenderer(new CategoryRenderer());
-		listCategory.setListData(getCategories());
+		listViewCategory.setCellRenderer(new CategoryRenderer());
+		listViewCategory.setListData(DataController.categories());
 
-		scrollPane = new JScrollPane(listCategory); // load wallet list
+		scrollPane = new JScrollPane(listViewCategory); // load wallet list
 		scrollPane.setBounds(6, 6, 430, 560);
 		add(scrollPane);
 
@@ -149,20 +148,20 @@ public class PanelCategory extends BaseJPanel {
 		bg.add(radioBtnExpense);
 		bg.add(radioBtnIncome);
 
-		listCategory.addMouseListener(new MouseAdapter() {
+		listViewCategory.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (listCategory.isSelectionEmpty()) {
+				if (listViewCategory.isSelectionEmpty()) {
 					return;
 				}
 
-				int index = listCategory.locationToIndex(e.getPoint());
+				int index = listViewCategory.locationToIndex(e.getPoint());
 
 				if (index < 0) {
 					return;
 				}
 
-				selectedCM = listCategory.getModel().getElementAt(index);
+				selectedCM = listViewCategory.getModel().getElementAt(index);
 				if (selectedCM != null) {
 					txtCategoryName.setText(selectedCM.getName());
 					selectedColor = new Color(selectedCM.getColor());
@@ -228,30 +227,6 @@ public class PanelCategory extends BaseJPanel {
 		});
 	}
 
-	private CategoryModel[] getCategories() {
-		String sql = "SELECT * FROM category";
-		try {
-			Connection connection = DbHelper.connection();
-			Statement statement = connection.createStatement();
-			ResultSet result = statement.executeQuery(sql);
-			List<CategoryModel> categories = new ArrayList<>();
-			while (result.next()) {
-				final int id = result.getInt("id");
-				final String name = result.getString("name");
-				final int color = result.getInt("color");
-				final boolean isIncome = result.getBoolean("is_income");
-				categories.add(new CategoryModel(id, name, color, isIncome));
-
-			}
-
-			return categories.toArray(new CategoryModel[0]);
-		} catch (SQLException e) {
-			DbHelper.printSQLException(e);
-		}
-
-		return new CategoryModel[0];
-	}
-
 	private void addCategory(String name, int color, boolean isIncome) {
 		if (name.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Please enter category name!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -263,8 +238,8 @@ public class PanelCategory extends BaseJPanel {
 			return;
 		}
 
-		for (int i = 0, l = listCategory.getModel().getSize(); i < l; i++) {
-			CategoryModel categoryModel = listCategory.getModel().getElementAt(i);
+		for (int i = 0, l = listViewCategory.getModel().getSize(); i < l; i++) {
+			CategoryModel categoryModel = listViewCategory.getModel().getElementAt(i);
 			if (new String(name).equals(categoryModel.getName())) {
 				JOptionPane.showMessageDialog(this, "Please enter new category name!", "Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -285,7 +260,7 @@ public class PanelCategory extends BaseJPanel {
 		}
 
 		// refresh the category list
-		listCategory.setListData(getCategories());
+		listViewCategory.setListData(DataController.categories());
 
 		// Clear category name text field
 		txtCategoryName.setText("");
@@ -312,7 +287,7 @@ public class PanelCategory extends BaseJPanel {
 			DbHelper.printSQLException(e);
 		}
 		// refresh the wallet list
-		listCategory.setListData(getCategories());
+		listViewCategory.setListData(DataController.categories());
 		// Clear wallet name text field
 		txtCategoryName.setText("");
 		// Clear wallet color panel
@@ -337,7 +312,7 @@ public class PanelCategory extends BaseJPanel {
 			DbHelper.printSQLException(ee);
 		}
 		// refresh the wallet list
-		listCategory.setListData(getCategories());
+		listViewCategory.setListData(DataController.categories());
 
 		// Clear wallet name text field
 		txtCategoryName.setText("");

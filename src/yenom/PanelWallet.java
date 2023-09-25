@@ -28,12 +28,12 @@ import javax.swing.JTextField;
 
 import utils.*;
 import database.*;
-import widgets.*;
+import renderer.*;
 
 public class PanelWallet extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JList<WalletModel> listWallet;
+	private JList<WalletModel> listViewWallet;
 	private JPanel selectedColorPanel;
 	private JTextField txtWalletName;
 	private JScrollPane scrollPane;
@@ -47,7 +47,7 @@ public class PanelWallet extends BaseJPanel {
 
 	@Override
 	public void disposeUi() {
-		listWallet = null;
+		listViewWallet = null;
 		selectedColorPanel = null;
 		txtWalletName = null;
 		scrollPane = null;
@@ -64,21 +64,21 @@ public class PanelWallet extends BaseJPanel {
 		setBounds(6, 0, 862, 564);
 		setLayout(null);
 
-		listWallet = new JList<>();
-		listWallet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listViewWallet = new JList<>();
+		 listViewWallet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		// set WalletRender for custom widget
-		listWallet.setCellRenderer(new WalletRenderer());
-		listWallet.setListData(getWallets());
+		listViewWallet.setCellRenderer(new WalletRenderer());
+		listViewWallet.setListData(DataController.wallets());
 
-		scrollPane = new JScrollPane(listWallet); // load wallet list
+		scrollPane = new JScrollPane(listViewWallet); // load wallet list
 		scrollPane.setBounds(6, 6, 430, 560);
 		add(scrollPane);
 
-		JLabel lblNewLabel = new JLabel("Manage Wallet");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Default", Font.PLAIN, 24));
-		lblNewLabel.setBounds(531, 6, 237, 33);
-		add(lblNewLabel);
+		JLabel lblTitle = new JLabel("Manage Wallet");
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setFont(new Font("Default", Font.PLAIN, 24));
+		lblTitle.setBounds(531, 6, 237, 33);
+		add(lblTitle);
 
 		JLabel lblTextField = new JLabel("Wallet Name *");
 		lblTextField.setFont(new Font("Default", Font.PLAIN, 13));
@@ -123,20 +123,20 @@ public class PanelWallet extends BaseJPanel {
 		
 
 
-		listWallet.addMouseListener(new MouseAdapter() {
+		listViewWallet.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (listWallet.isSelectionEmpty()) {
+				if (listViewWallet.isSelectionEmpty()) {
 					return;
 				}
 
-				int index = listWallet.locationToIndex(e.getPoint());
+				int index = listViewWallet.locationToIndex(e.getPoint());
 
 				if (index < 0) {
 					return;
 				}
 
-				selectedWM = listWallet.getModel().getElementAt(index);
+				selectedWM = listViewWallet.getModel().getElementAt(index);
 				if (selectedWM != null) {
 					txtWalletName.setText(selectedWM.getName());
 					selectedColor = new Color(selectedWM.getColor());
@@ -180,28 +180,6 @@ public class PanelWallet extends BaseJPanel {
 
 	}
 
-	private WalletModel[] getWallets() {
-		String sql = "SELECT * FROM wallet";
-		try {
-			Connection connection = DbHelper.connection();
-			Statement statement = connection.createStatement();
-			ResultSet result = statement.executeQuery(sql);
-			List<WalletModel> wallets = new ArrayList<>();
-			while (result.next()) {
-				final int id = result.getInt("id");
-				final String name = result.getString("name");
-				final int color = result.getInt("color");
-				final int tot_income = result.getInt("total_income");
-				final int tot_expense = result.getInt("total_expense");
-				wallets.add(new WalletModel(id, name, color, tot_income, tot_expense));
-			}
-
-			return wallets.toArray(new WalletModel[0]);
-		} catch (SQLException e) {
-			DbHelper.printSQLException(e);
-		}
-		return new WalletModel[0];
-	}
 
 	private void addWallet(String name, int color) {
 		if (name.isEmpty()) {
@@ -215,8 +193,8 @@ public class PanelWallet extends BaseJPanel {
 			return;
 		}
 
-		for (int i = 0, l = listWallet.getModel().getSize(); i < l; i++) {
-			WalletModel walletModel = listWallet.getModel().getElementAt(i);
+		for (int i = 0, l = listViewWallet.getModel().getSize(); i < l; i++) {
+			WalletModel walletModel = listViewWallet.getModel().getElementAt(i);
 			if (new String(name).equals(walletModel.getName())) {
 				JOptionPane.showMessageDialog(this, "Please enter new wallet name!", "Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -239,7 +217,7 @@ public class PanelWallet extends BaseJPanel {
 		}
 
 		// refresh the wallet list
-		listWallet.setListData(getWallets());
+		listViewWallet.setListData(DataController.wallets());
 
 		// Clear wallet name text field
 		txtWalletName.setText("");
@@ -266,7 +244,7 @@ public class PanelWallet extends BaseJPanel {
 			DbHelper.printSQLException(ee);
 		}
 		// refresh the wallet list
-		listWallet.setListData(getWallets());
+		listViewWallet.setListData(DataController.wallets());
 		// Clear wallet name text field
 		txtWalletName.setText("");
 		// Clear wallet color panel
@@ -291,7 +269,7 @@ public class PanelWallet extends BaseJPanel {
 			DbHelper.printSQLException(ee);
 		}
 		// refresh the wallet list
-		listWallet.setListData(getWallets());
+		listViewWallet.setListData(DataController.wallets());
 
 		// Clear wallet name text field
 		txtWalletName.setText("");

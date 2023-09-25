@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 
 import javax.swing.SwingConstants;
 
+import renderer.*;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 
@@ -13,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import utils.*;
-import widgets.*;
 
 public class PanelDashboard extends BaseJPanel {
 

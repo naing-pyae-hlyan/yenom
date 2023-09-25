@@ -50,35 +50,6 @@ public class DbHelper {
 		}
 	}
 
-//	public static PreparedStatement preparedStatementQuery(String query) {
-//		try {
-//			return connection.prepareStatement(query);
-//		} catch (SQLException e) {
-//			printSQLException(e);
-//		}
-//
-//		return null;
-//	}
-//
-//	public static Statement statement() {
-//		try {
-//
-//			return connection.createStatement();
-//		} catch (SQLException e) {
-//			printSQLException(e);
-//		}
-//		return null;
-//	}
-//
-//	public static ResultSet executeQuery(String query) {
-//		try {
-//			Statement statement = statement();
-//			return statement.executeQuery(query);
-//		} catch (SQLException e) {
-//			printSQLException(e);
-//		}
-//		return null;
-//	}
 
 	public static void close() {
 		try {
