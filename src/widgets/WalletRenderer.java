@@ -23,17 +23,16 @@ public class WalletRenderer extends JPanel implements ListCellRenderer<WalletMod
 
 	private static final long serialVersionUID = 1L;
 
-	private JPanel child;
 	private JLabel lblName;
 
 	/**
 	 * Create the panel.
-	 */
+	 **/
 	public WalletRenderer() {
 		setLayout(new BorderLayout(0, 0));
 
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		child = new JPanel();
+		JPanel child = new JPanel();
 		child.setLayout(new BorderLayout(0, 0));
 
 		JLabel lblIcon = new JLabel("");
@@ -42,12 +41,9 @@ public class WalletRenderer extends JPanel implements ListCellRenderer<WalletMod
 
 		lblName = new JLabel("");
 		lblName.setFont(new Font("JetBrains Mono", Font.PLAIN, 16));
-
 		child.add(lblName, BorderLayout.CENTER);
 
-
 		add(child);
-
 	}
 
 	@Override

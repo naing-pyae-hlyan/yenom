@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -20,9 +21,8 @@ public class CategoryRenderer extends JPanel implements ListCellRenderer<Categor
 
 	private static final long serialVersionUID = 1L;
 
+	private JLabel lblType;
 	private JLabel lblName;
-	private JPanel panelColor;
-	private JLabel lblChoGyi;
 
 	/**
 	 * Create the panel.
@@ -30,41 +30,42 @@ public class CategoryRenderer extends JPanel implements ListCellRenderer<Categor
 	public CategoryRenderer() {
 		setLayout(new BorderLayout(0, 0));
 
+		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		JPanel child = new JPanel();
+		child.setLayout(new BorderLayout(0, 0));
+
 		JLabel lblIcon = new JLabel("");
 		lblIcon.setIcon(new ImageIcon(MyIcons.logo_categories_24));
-		add(lblIcon, BorderLayout.WEST);
+		child.add(lblIcon, BorderLayout.WEST);
 
 		lblName = new JLabel("");
-		lblName.setFont(new Font("Default", Font.PLAIN, 16));
+		lblName.setFont(new Font("JetBrains Mono", Font.PLAIN, 16));
+		child.add(lblName, BorderLayout.CENTER);
 
-		add(lblName, BorderLayout.CENTER);
+		lblType = new JLabel("");
+		lblType.setFont(new Font("JetBrains Mono", Font.PLAIN, 16));
+		child.add(lblType, BorderLayout.EAST);
 
-		panelColor = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panelColor.getLayout();
-		flowLayout.setHgap(HEIGHT);
-		add(panelColor, BorderLayout.SOUTH);
-
-		lblChoGyi = new JLabel("");
-		lblChoGyi.setFont(new Font("Default", Font.PLAIN, 16));
-		add(lblChoGyi, BorderLayout.NORTH);
-
+		add(child);
 	}
 
 	@Override
 	public Component getListCellRendererComponent(JList<? extends CategoryModel> list, CategoryModel value, int index,
 			boolean isSelected, boolean cellHasFocus) {
 
-		lblChoGyi.setText(value.isIncome() ? "Income" : "Expense");
+		lblType.setText(value.isIncome() ? "Income" : "Expense");
 		lblName.setText("	" + value.getName());
-		panelColor.setBackground(new Color(value.getColor()));
 
+		lblType.setOpaque(true);
 		lblName.setOpaque(true);
 
 		if (isSelected) {
 			lblName.setBackground(MyColors.hoverColor());
+			lblType.setBackground(MyColors.hoverColor());
 			setBackground(MyColors.hoverColor());
 		} else {
 			lblName.setBackground(Color.white);
+			lblType.setBackground(Color.white);
 			setBackground(Color.white);
 		}
 

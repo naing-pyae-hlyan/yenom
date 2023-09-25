@@ -56,8 +56,16 @@ public class PanelCategory extends BaseJPanel {
 
 	@Override
 	public void disposeUi() {
+		listCategory = null;
+		selectedColorPanel = null;
+		txtCategoryName = null;
+		scrollPane = null;
+		radioBtnExpense = null;
+		radioBtnIncome = null;
+		selectedColor  = Color.white;
+		selectedCM = null;
+		eiEnum = EIEnum.expense;
 		setVisible(false);
-
 	}
 
 	@Override
@@ -94,7 +102,6 @@ public class PanelCategory extends BaseJPanel {
 		txtCategoryName.setHorizontalAlignment(SwingConstants.LEFT);
 		txtCategoryName.setBounds(503, 107, 292, 64);
 		add(txtCategoryName);
-		txtCategoryName.setColumns(10);
 
 		JLabel lblTextfield2 = new JLabel("Category Color");
 		lblTextfield2.setFont(new Font("Default", Font.PLAIN, 13));
@@ -145,7 +152,16 @@ public class PanelCategory extends BaseJPanel {
 		listCategory.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (listCategory.isSelectionEmpty()) {
+					return;
+				}
+
 				int index = listCategory.locationToIndex(e.getPoint());
+
+				if (index < 0) {
+					return;
+				}
+
 				selectedCM = listCategory.getModel().getElementAt(index);
 				if (selectedCM != null) {
 					txtCategoryName.setText(selectedCM.getName());

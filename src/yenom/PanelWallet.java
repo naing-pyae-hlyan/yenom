@@ -1,6 +1,7 @@
 package yenom;
 
 import java.awt.Color;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,6 @@ import java.sql.PreparedStatement;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -90,7 +90,6 @@ public class PanelWallet extends BaseJPanel {
 		txtWalletName.setHorizontalAlignment(SwingConstants.LEFT);
 		txtWalletName.setBounds(503, 176, 292, 64);
 		add(txtWalletName);
-		txtWalletName.setColumns(10);
 
 		JLabel lblTextfield2 = new JLabel("Wallet Color");
 		lblTextfield2.setFont(new Font("Default", Font.PLAIN, 13));
@@ -121,6 +120,8 @@ public class PanelWallet extends BaseJPanel {
 		btnDeleteButton.setBounds(733, 414, 64, 64);
 		btnDeleteButton.setIcon(new ImageIcon(MyIcons.logo_delete_48));
 		add(btnDeleteButton);
+		
+
 
 		listWallet.addMouseListener(new MouseAdapter() {
 			@Override
@@ -128,10 +129,13 @@ public class PanelWallet extends BaseJPanel {
 				if (listWallet.isSelectionEmpty()) {
 					return;
 				}
+
 				int index = listWallet.locationToIndex(e.getPoint());
+
 				if (index < 0) {
 					return;
 				}
+
 				selectedWM = listWallet.getModel().getElementAt(index);
 				if (selectedWM != null) {
 					txtWalletName.setText(selectedWM.getName());
