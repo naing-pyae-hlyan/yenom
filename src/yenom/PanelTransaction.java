@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -38,13 +39,15 @@ public class PanelTransaction extends BaseJPanel {
 	private JTextField txtDescription;
 
 	private JScrollPane scrollPane;
+	private JComboBox comboWallet;
+	private JComboBox comboCategory;
 
-	private TransactionModel transactionModel = null;
+	private TransactionModel selectedTM = null;
 
-	private List<WalletModel> walletList = new ArrayList<>();
-	private List<CategoryModel> categoryList = new ArrayList<>();
-	private int selectedWalletIndex;
-	private int selectedCategoryIndex;
+//	private List<WalletModel> walletList = new ArrayList<>();
+//	private List<CategoryModel> categoryList = new ArrayList<>();
+//	private int selectedWalletIndex;
+//	private int selectedCategoryIndex;
 
 	/**
 	 * Create the panel.
@@ -55,7 +58,7 @@ public class PanelTransaction extends BaseJPanel {
 
 	@Override
 	public void disposeUi() {
-		transactionModel = null;
+		selectedTM = null;
 		setVisible(false);
 	}
 
@@ -83,6 +86,29 @@ public class PanelTransaction extends BaseJPanel {
 		lblTitle.setBounds(531, 6, 237, 33);
 		add(lblTitle);
 
+		JLabel lblTextField = new JLabel("Wallet");
+		lblTextField.setFont(new Font("Default", Font.PLAIN, 13));
+		lblTextField.setBounds(505, 65, 114, 16);
+		add(lblTextField);
+
+		final WalletModel[] wallets = DataController.getWallets().toArray(new WalletModel[0]);
+		comboWallet = new JComboBox<WalletModel>(wallets);
+		comboWallet.setBounds(503, 66, 292, 64);
+		add(comboWallet);
+
+		JLabel lblTextField2 = new JLabel("Category");
+		lblTextField2.setFont(new Font("Default", Font.PLAIN, 13));
+		lblTextField2.setBounds(505, 141, 114, 16);
+		add(lblTextField2);
+
+		// TODO need to refresh combo list when new item[wallet or category] is
+		// added.
+		final CategoryModel[] categories = DataController.categories();
+		comboCategory = new JComboBox<CategoryModel>(categories);
+		comboCategory.setBounds(503, 142, 292, 64);
+		add(comboCategory);
+
+		// TODO add amount input
 	}
 
 	private void setComboBoxData() {
