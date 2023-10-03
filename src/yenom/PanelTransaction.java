@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,6 +25,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import utils.*;
 import database.*;
@@ -39,8 +44,8 @@ public class PanelTransaction extends BaseJPanel {
 	private JTextField txtDescription;
 
 	private JScrollPane scrollPane;
-	private JComboBox comboWallet;
-	private JComboBox comboCategory;
+	private JComboBox<WalletModel> comboWallet;
+	private JComboBox<CategoryModel> comboCategory;
 
 	private TransactionModel selectedTM = null;
 
@@ -68,7 +73,6 @@ public class PanelTransaction extends BaseJPanel {
 		setVisible(true);
 		setBounds(6, 0, 862, 564);
 		setLayout(null);
-		setComboBoxData();
 
 		listViewTrans = new JList<>();
 		listViewTrans.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -86,33 +90,72 @@ public class PanelTransaction extends BaseJPanel {
 		lblTitle.setBounds(531, 6, 237, 33);
 		add(lblTitle);
 
-		JLabel lblTextField = new JLabel("Wallet");
-		lblTextField.setFont(new Font("Default", Font.PLAIN, 13));
-		lblTextField.setBounds(505, 65, 114, 16);
-		add(lblTextField);
+		UtilDateModel model = new UtilDateModel();
+		Properties properties = new Properties();
+		properties.put("text.today", "Today");
+		properties.put("text.month", "Month");
+		properties.put("text.year", "Year");
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
+		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, null);
+		add(datePicker);
 
-		final WalletModel[] wallets = DataController.getWallets().toArray(new WalletModel[0]);
+		JLabel lblWallet = new JLabel("Wallet");
+		lblWallet.setFont(new Font("Default", Font.PLAIN, 13));
+		lblWallet.setBounds(505, 65, 114, 16);
+		add(lblWallet);
+
+		WalletModel[] wallets = DataController.getWallets().toArray(new WalletModel[0]);
 		comboWallet = new JComboBox<WalletModel>(wallets);
 		comboWallet.setBounds(503, 66, 292, 64);
 		add(comboWallet);
 
-		JLabel lblTextField2 = new JLabel("Category");
-		lblTextField2.setFont(new Font("Default", Font.PLAIN, 13));
-		lblTextField2.setBounds(505, 141, 114, 16);
-		add(lblTextField2);
+		JLabel lblCategory = new JLabel("Category");
+		lblCategory.setFont(new Font("Default", Font.PLAIN, 13));
+		lblCategory.setBounds(505, 141, 114, 16);
+		add(lblCategory);
 
 		// TODO need to refresh combo list when new item[wallet or category] is
 		// added.
-		final CategoryModel[] categories = DataController.categories();
+		CategoryModel[] categories = DataController.categories();
 		comboCategory = new JComboBox<CategoryModel>(categories);
 		comboCategory.setBounds(503, 142, 292, 64);
 		add(comboCategory);
 
-		// TODO add amount input
+		JLabel lblAmount = new JLabel("Amount *");
+		lblAmount.setFont(new Font("Default", Font.PLAIN, 13));
+		lblAmount.setBounds(505, 217, 114, 16);
+		add(lblAmount);
+
+		txtAmount = new JTextField("");
+		txtAmount.setFont(new Font("Default", Font.PLAIN, 13));
+		txtAmount.setHorizontalAlignment(SwingConstants.LEFT);
+		txtAmount.setBounds(503, 234, 292, 64);
+		add(txtAmount);
+
+		JLabel lblDesc = new JLabel("Description");
+		lblDesc.setFont(new Font("Default", Font.PLAIN, 13));
+		lblDesc.setBounds(505, 309, 114, 16);
+		add(lblDesc);
+
+		txtDescription = new JTextField("");
+		txtDescription.setFont(new Font("Default", Font.PLAIN, 13));
+		txtDescription.setHorizontalAlignment(SwingConstants.LEFT);
+		txtDescription.setBounds(503, 326, 292, 64);
+		add(txtDescription);
+		
+		JButton btnNewButton = new JButton("");
+		btnNewButton.setBounds(505, 414, 64, 64);
+		btnNewButton.setIcon(new ImageIcon(MyIcons.logo_add_48));
+		add(btnNewButton);
+
+		JButton btnUpdateButton = new JButton("");
+		btnUpdateButton.setBounds(619, 414, 64, 64);
+		btnUpdateButton.setIcon(new ImageIcon(MyIcons.logo_update_48));
+		add(btnUpdateButton);
+
+		JButton btnDeleteButton = new JButton("");
+		btnDeleteButton.setBounds(733, 414, 64, 64);
+		btnDeleteButton.setIcon(new ImageIcon(MyIcons.logo_delete_48));
+		add(btnDeleteButton);
 	}
-
-	private void setComboBoxData() {
-
-	}
-
 }
