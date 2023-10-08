@@ -1,11 +1,12 @@
 package database;
 
 import java.sql.Connection;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 public class DataController {
@@ -85,14 +86,14 @@ public class DataController {
 				final int id = result.getInt("id");
 				final float amount = result.getFloat("amount");
 				final String desc = result.getString("description");
-				final Date dateTime = result.getDate("date");
 				final Date createdDate = result.getDate("created_date");
+				final Date updatedDate = result.getDate("updated_date");
 				final int categoryId = result.getInt("category_id");
 				final int walletId = result.getInt("wallet_id");
 				final String categoryName = result.getString("category_name");
 				final String walletName = result.getString("wallet_name");
 
-				trans.add(new TransactionModel(id, amount, desc, dateTime, createdDate, categoryId, walletId,
+				trans.add(new TransactionModel(id, amount, desc, createdDate, updatedDate, categoryId, walletId,
 						categoryName, walletName));
 			}
 		} catch (SQLException e) {

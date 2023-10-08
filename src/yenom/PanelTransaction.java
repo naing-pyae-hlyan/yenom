@@ -6,12 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -36,7 +36,6 @@ public class PanelTransaction extends BaseJPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JList<TransactionModel> listViewTrans;
-	private JPanel selectedColorPanel;
 	private JTextField txtAmount;
 	private JTextField txtDescription;
 
@@ -156,12 +155,14 @@ public class PanelTransaction extends BaseJPanel {
 				}
 
 				String desc = txtDescription.getText();
-				Date current = new Date();
+				Date current = new Date(System.currentTimeMillis());
+
 				CategoryModel selectedCategory = (CategoryModel) comboCategory.getSelectedItem();
 				WalletModel selectedWallet = (WalletModel) comboWallet.getSelectedItem();
 
-				TransactionModel trans = new TransactionModel(-1, 0, desc, current, current, selectedCategory.getId(),
-						selectedWallet.getId(), selectedCategory.getName(), selectedWallet.getName());
+				TransactionModel trans = new TransactionModel(-1, number, desc, current, current,
+						selectedCategory.getId(), selectedWallet.getId(), selectedCategory.getName(),
+						selectedWallet.getName());
 				addTrans(trans);
 
 			}
@@ -173,6 +174,33 @@ public class PanelTransaction extends BaseJPanel {
 			JOptionPane.showMessageDialog(this, "Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		// todo check selecgtedTM has data
 
+		String sql = "INSERT INTO transaction (amount, description, category_id, category_name, wallet_id, wallet_name, created_date, updated_date) VALUE (?, ?, ?, ?, ?, ?, ?, ?)";
+
+		try {
+
+			Connection connection = DbHelper.connection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setFloat(1, model.getAmount());
+			statement.setString(2, model.getDescription());
+			statement.setInt(3, model.getCategoryId());
+			statement.setString(4, model.getCategoryName());
+			statement.setInt(5, model.getWalletId());
+			statement.setString(6, model.getWalletName());
+			statement.setDate(7, model.getCreatedDate());
+			statement.setDate(8, model.getUpdatedDate());
+			
+			statement.executeUpdate();
+		} catch (SQLException ee) {
+			DbHelper.printSQLException(ee);
+		}
+		
+		// refresh the transactions list
+		listViewTrans.setListData(DataController.transactions());
+		
+		// Clear amount & description text field
+		txtAmount.setText("");
+		txtDescription.setText("");
 	}
 }

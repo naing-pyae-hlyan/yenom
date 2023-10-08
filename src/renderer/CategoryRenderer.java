@@ -60,12 +60,16 @@ public class CategoryRenderer extends JPanel implements ListCellRenderer<Categor
 		lblName.setOpaque(true);
 
 		if (isSelected) {
-			lblName.setBackground(MyColors.hoverColor());
-			lblType.setBackground(MyColors.hoverColor());
-			setBackground(MyColors.hoverColor());
+			lblName.setBackground(MyColors.primaryColor());
+			lblType.setBackground(MyColors.primaryColor());
+			lblName.setForeground(Color.white);
+			lblType.setForeground(Color.white);
+			setBackground(MyColors.primaryColor());
 		} else {
 			lblName.setBackground(Color.white);
 			lblType.setBackground(Color.white);
+			lblName.setForeground(Color.black);
+			lblType.setForeground(Color.black);
 			setBackground(Color.white);
 		}
 

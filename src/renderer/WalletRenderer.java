@@ -54,10 +54,12 @@ public class WalletRenderer extends JPanel implements ListCellRenderer<WalletMod
 		lblName.setOpaque(true);
 
 		if (isSelected) {
-			lblName.setBackground(MyColors.hoverColor());
-			setBackground(MyColors.hoverColor());
+			lblName.setBackground(MyColors.primaryColor());
+			lblName.setForeground(Color.white);
+			setBackground(MyColors.primaryColor());
 		} else {
 			lblName.setBackground(Color.white);
+			lblName.setForeground(Color.black);
 			setBackground(Color.white);
 		}
 
