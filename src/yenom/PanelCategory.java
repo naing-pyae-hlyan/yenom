@@ -54,26 +54,13 @@ public class PanelCategory extends BaseJPanel {
 	}
 
 	@Override
-	public void disposeUi() {
-		listViewCategory = null;
-		selectedColorPanel = null;
-		txtCategoryName = null;
-		scrollPane = null;
-		radioBtnExpense = null;
-		radioBtnIncome = null;
-		selectedColor = Color.white;
-		selectedCM = null;
-		eiEnum = EIEnum.expense;
-		setVisible(false);
+	public void disposeUi(String arg) {
+		super.disposeUi(arg);
 	}
 
 	@Override
-	public void createUi() {
-		setVisible(true);
-		System.out.println("PanelCategory createUI");
-
-		setBounds(6, 0, 862, 564);
-		setLayout(null);
+	public void createUi(String arg) {
+		super.createUi(arg);
 
 		listViewCategory = new JList<>();
 		listViewCategory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

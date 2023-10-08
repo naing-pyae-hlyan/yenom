@@ -192,48 +192,44 @@ public class Home extends JFrame {
 		leftDashboard.addMouseListener(new DrawerButtonMouseAdapter(leftDashboard) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenMenuItemisClicked(leftDashboard, panelDashboard);
-//				whenClickedMenuShowThePanel(dashboard, drawerDashboard);
+				whenMenuItemisClicked(leftDashboard, panelDashboard, "Dashboard");
 			}
 		});
 
 		leftTransactions.addMouseListener(new DrawerButtonMouseAdapter(leftTransactions) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenMenuItemisClicked(leftTransactions, panelTransaction);
-//				whenClickedMenuShowThePanel(transaction, drawerTransactions);
+				whenMenuItemisClicked(leftTransactions, panelTransaction, "Transaction");
 			}
 		});
 
 		leftCategories.addMouseListener(new DrawerButtonMouseAdapter(leftCategories) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenMenuItemisClicked(leftCategories, panelCategory);
-//				whenClickedMenuShowThePanel(category, drawerCategories);
+				whenMenuItemisClicked(leftCategories, panelCategory, "Category");
 			}
 		});
 
 		leftWallets.addMouseListener(new DrawerButtonMouseAdapter(leftWallets) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				whenMenuItemisClicked(leftWallets, panelWallet);
-//				whenClickedMenuShowThePanel(wallet, drawerWallets);
+				whenMenuItemisClicked(leftWallets, panelWallet, "Wallet");
 			}
 		});
 
 	}
 
-	private void whenMenuItemisClicked(JPanel leftPanelItem, BaseJPanel rightPanel) {
+	private void whenMenuItemisClicked(JPanel leftPanelItem, BaseJPanel rightPanel, String arg) {
 		if (selectedLeftPanelName == leftPanelItem.getName())
 			return;
 		selectedLeftPanelName = leftPanelItem.getName();
 
-		panelDashboard.disposeUi();
-		panelTransaction.disposeUi();
-		panelCategory.disposeUi();
-		panelWallet.disposeUi();
+		panelDashboard.disposeUi("Dashboard");
+		panelTransaction.disposeUi("Transaction");
+		panelCategory.disposeUi("Category");
+		panelWallet.disposeUi("Wallet");
 
-		rightPanel.createUi();
+		rightPanel.createUi(arg);
 
 		leftDashboard.setBackground(MyColors.primaryColor());
 		leftTransactions.setBackground(MyColors.primaryColor());

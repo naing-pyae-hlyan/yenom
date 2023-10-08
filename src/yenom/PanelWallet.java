@@ -46,26 +46,16 @@ public class PanelWallet extends BaseJPanel {
 	}
 
 	@Override
-	public void disposeUi() {
-		listViewWallet = null;
-		selectedColorPanel = null;
-		txtWalletName = null;
-		scrollPane = null;
-		selectedColor = Color.white;
-		selectedWM = null;
-		setVisible(false);
-		System.out.println("PanelWallet : disposeUi()");
+	public void disposeUi(String arg) {
+		super.disposeUi(arg);
 	}
 
 	@Override
-	public void createUi() {
-		System.out.println("PanelWallet : createUi()");
-		setVisible(true);
-		setBounds(6, 0, 862, 564);
-		setLayout(null);
+	public void createUi(String arg) {
+		super.createUi(arg);
 
 		listViewWallet = new JList<>();
-		 listViewWallet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listViewWallet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		// set WalletRender for custom widget
 		listViewWallet.setCellRenderer(new WalletRenderer());
 		listViewWallet.setListData(DataController.wallets());
@@ -120,8 +110,6 @@ public class PanelWallet extends BaseJPanel {
 		btnDeleteButton.setBounds(733, 414, 64, 64);
 		btnDeleteButton.setIcon(new ImageIcon(MyIcons.logo_delete_48));
 		add(btnDeleteButton);
-		
-
 
 		listViewWallet.addMouseListener(new MouseAdapter() {
 			@Override
@@ -179,7 +167,6 @@ public class PanelWallet extends BaseJPanel {
 		});
 
 	}
-
 
 	private void addWallet(String name, int color) {
 		if (name.isEmpty()) {

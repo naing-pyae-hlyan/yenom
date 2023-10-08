@@ -21,8 +21,8 @@ public class PanelDashboard extends BaseJPanel {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void disposeUi() {
-		setVisible(false);
+	public void disposeUi(String arg) {
+		super.disposeUi(arg);
 	}
 
 	/**
@@ -33,11 +33,8 @@ public class PanelDashboard extends BaseJPanel {
 	}
 
 	@Override
-	public void createUi() {
-		setVisible(true);
-		System.out.println("PanelDashboard createUI");
-		setBounds(6, 0, 862, 572);
-		setLayout(null);
+	public void createUi(String arg) {
+		super.createUi(arg);
 
 		JLabel lblDashboard = new JLabel("Dashboard");
 		lblDashboard.setHorizontalAlignment(SwingConstants.LEFT);

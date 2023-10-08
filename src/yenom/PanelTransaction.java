@@ -20,15 +20,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 import utils.*;
 import database.*;
@@ -58,21 +55,16 @@ public class PanelTransaction extends BaseJPanel {
 	 * Create the panel.
 	 */
 	public PanelTransaction() {
-		createUi();
 	}
 
 	@Override
-	public void disposeUi() {
-		selectedTM = null;
-		setVisible(false);
+	public void disposeUi(String arg) {
+		super.disposeUi(arg);
 	}
 
 	@Override
-	public void createUi() {
-		System.out.println("PanelTransaction : createUi()");
-		setVisible(true);
-		setBounds(6, 0, 862, 564);
-		setLayout(null);
+	public void createUi(String arg) {
+		super.createUi(arg);
 
 		listViewTrans = new JList<>();
 		listViewTrans.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -89,15 +81,6 @@ public class PanelTransaction extends BaseJPanel {
 		lblTitle.setFont(new Font("Default", Font.PLAIN, 24));
 		lblTitle.setBounds(531, 6, 237, 33);
 		add(lblTitle);
-
-		UtilDateModel model = new UtilDateModel();
-		Properties properties = new Properties();
-		properties.put("text.today", "Today");
-		properties.put("text.month", "Month");
-		properties.put("text.year", "Year");
-		JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
-		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, null);
-		add(datePicker);
 
 		JLabel lblWallet = new JLabel("Wallet");
 		lblWallet.setFont(new Font("Default", Font.PLAIN, 13));
@@ -142,7 +125,7 @@ public class PanelTransaction extends BaseJPanel {
 		txtDescription.setHorizontalAlignment(SwingConstants.LEFT);
 		txtDescription.setBounds(503, 326, 292, 64);
 		add(txtDescription);
-		
+
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setBounds(505, 414, 64, 64);
 		btnNewButton.setIcon(new ImageIcon(MyIcons.logo_add_48));
@@ -157,5 +140,39 @@ public class PanelTransaction extends BaseJPanel {
 		btnDeleteButton.setBounds(733, 414, 64, 64);
 		btnDeleteButton.setIcon(new ImageIcon(MyIcons.logo_delete_48));
 		add(btnDeleteButton);
+
+		btnNewButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String amount = txtAmount.getText();
+				float number = 0;
+				try {
+					number = Float.parseFloat(amount);
+
+				} catch (NumberFormatException exception) {
+					JOptionPane.showMessageDialog(new JPanel(), "Please enter amount!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				String desc = txtDescription.getText();
+				Date current = new Date();
+				CategoryModel selectedCategory = (CategoryModel) comboCategory.getSelectedItem();
+				WalletModel selectedWallet = (WalletModel) comboWallet.getSelectedItem();
+
+				TransactionModel trans = new TransactionModel(-1, 0, desc, current, current, selectedCategory.getId(),
+						selectedWallet.getId(), selectedCategory.getName(), selectedWallet.getName());
+				addTrans(trans);
+
+			}
+		});
+	}
+
+	private void addTrans(TransactionModel model) {
+		if (model.getAmount() < 1) {
+			JOptionPane.showMessageDialog(this, "Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 	}
 }

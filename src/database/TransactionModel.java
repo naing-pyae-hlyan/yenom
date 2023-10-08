@@ -7,7 +7,7 @@ public class TransactionModel {
 	private int id;
 	private float amount;
 	private String description;
-	private Date datetime;
+	private Date updatedDate;
 	private Date createdDate;
 	private int categoryId;
 	private int walletId;
@@ -53,11 +53,11 @@ public class TransactionModel {
 	}
 
 	public Date getDatetime() {
-		return datetime;
+		return updatedDate;
 	}
 
 	public void setDatetime(Date datetime) {
-		this.datetime = datetime;
+		this.updatedDate = datetime;
 	}
 
 	public Date getCreatedDate() {
