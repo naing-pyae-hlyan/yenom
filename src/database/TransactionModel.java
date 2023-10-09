@@ -9,23 +9,19 @@ public class TransactionModel {
 	private String description;
 	private Date updatedDate;
 	private Date createdDate;
-	private int categoryId;
-	private int walletId;
-	private String categoryName;
-	private String walletName;
+	private WalletModel walletModel;
+	private CategoryModel categoryModel;
 
 	public TransactionModel(int id, float amount, String description, Date createdDate, Date updatedDate,
-			int categoryId, int walletId, String categoryName, String walletName) {
+			WalletModel walletModel, CategoryModel categoryModel) {
 		super();
 		this.setId(id);
 		this.setAmount(amount);
 		this.setDescription(description);
 		this.setCreatedDate(createdDate);
 		this.setUpdatedDate(updatedDate);
-		this.setCategoryId(categoryId);
-		this.setWalletId(walletId);
-		this.setCategoryName(categoryName);
-		this.setWalletName(walletName);
+		this.setWalletModel(walletModel);
+		this.setCategoryModel(categoryModel);
 	}
 
 	public int getId() {
@@ -68,36 +64,21 @@ public class TransactionModel {
 		this.updatedDate = datetime;
 	}
 
-	public int getCategoryId() {
-		return categoryId;
+
+	public WalletModel getWalletModel() {
+		return walletModel;
 	}
 
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	public void setWalletModel(WalletModel walletModel) {
+		this.walletModel = walletModel;
 	}
 
-	public int getWalletId() {
-		return walletId;
+	public CategoryModel getCategoryModel() {
+		return categoryModel;
 	}
 
-	public void setWalletId(int walletId) {
-		this.walletId = walletId;
-	}
-
-	public String getCategoryName() {
-		return categoryName;
-	}
-
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-
-	public String getWalletName() {
-		return walletName;
-	}
-
-	public void setWalletName(String walletName) {
-		this.walletName = walletName;
+	public void setCategoryModel(CategoryModel categoryModel) {
+		this.categoryModel = categoryModel;
 	}
 
 }

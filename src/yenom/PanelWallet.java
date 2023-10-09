@@ -189,15 +189,15 @@ public class PanelWallet extends BaseJPanel {
 			}
 		}
 
-		String sql = "INSERT INTO wallet (name, color, total_income, total_expense) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO wallet (w_name, w_color, total_income, total_expense) VALUES (?, ?, ?, ?)";
 		try {
 
 			Connection connection = DbHelper.connection();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, name);
 			statement.setInt(2, color);
-			statement.setInt(3, 0);
-			statement.setInt(4, 0);
+			statement.setFloat(3, 0);
+			statement.setFloat(4, 0);
 			statement.executeUpdate();
 		} catch (SQLException ee) {
 			DbHelper.printSQLException(ee);
@@ -218,7 +218,7 @@ public class PanelWallet extends BaseJPanel {
 			JOptionPane.showMessageDialog(this, "Please select wallet!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		String sql = "UPDATE wallet SET name = ?, color = ? WHERE id = ?";
+		String sql = "UPDATE wallet SET w_name = ?, w_color = ? WHERE w_id = ?";
 		try {
 			Connection connection = DbHelper.connection();
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -245,7 +245,7 @@ public class PanelWallet extends BaseJPanel {
 			JOptionPane.showMessageDialog(this, "Please select wallet!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		String sql = "DELETE FROM wallet WHERE id = ?";
+		String sql = "DELETE FROM wallet WHERE w_id = ?";
 		try {
 			Connection connection = DbHelper.connection();
 			PreparedStatement statement = connection.prepareStatement(sql);

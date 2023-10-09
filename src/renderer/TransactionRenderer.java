@@ -18,6 +18,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
 import database.TransactionModel;
+import database.WalletModel;
 import utils.MyColors;
 import utils.MyIcons;
 import java.awt.FlowLayout;
@@ -30,7 +31,6 @@ public class TransactionRenderer extends JPanel implements ListCellRenderer<Tran
 	private final DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
 	private JLabel lblDate;
-	private JLabel lblTime;
 	private JLabel lblWalletName;
 	private JLabel lblCategoryName;
 	private JLabel lblAmount;
@@ -71,9 +71,8 @@ public class TransactionRenderer extends JPanel implements ListCellRenderer<Tran
 			int index, boolean isSelected, boolean cellHasFocus) {
 
 		lblDate.setText(dateFormat.format(value.getUpdatedDate()));
-
-		lblWalletName.setText(value.getWalletName());
-		lblCategoryName.setText("	" + value.getCategoryName());
+		lblWalletName.setText(value.getWalletModel().getName());
+		lblCategoryName.setText("	" + value.getCategoryModel().getName());
 		lblAmount.setText(decimalFormat.format(value.getAmount()));
 
 		String desc = value.getDescription();

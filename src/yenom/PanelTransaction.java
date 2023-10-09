@@ -45,11 +45,6 @@ public class PanelTransaction extends BaseJPanel {
 
 	private TransactionModel selectedTM = null;
 
-//	private List<WalletModel> walletList = new ArrayList<>();
-//	private List<CategoryModel> categoryList = new ArrayList<>();
-//	private int selectedWalletIndex;
-//	private int selectedCategoryIndex;
-
 	/**
 	 * Create the panel.
 	 */
@@ -140,6 +135,30 @@ public class PanelTransaction extends BaseJPanel {
 		btnDeleteButton.setIcon(new ImageIcon(MyIcons.logo_delete_48));
 		add(btnDeleteButton);
 
+		listViewTrans.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (listViewTrans.isSelectionEmpty()) {
+					return;
+				}
+
+				int index = listViewTrans.locationToIndex(e.getPoint());
+
+				if (index < 0) {
+					return;
+				}
+
+				selectedTM = listViewTrans.getModel().getElementAt(index);
+				if (selectedTM != null) {
+//					comboWallet.setSelectedItem(selectedTM.getWal);
+					txtAmount.setText(String.valueOf(selectedTM.getAmount()));
+					if (selectedTM.getDescription() != null) {
+						txtDescription.setText(selectedTM.getDescription());
+					}
+				}
+			}
+		});
+
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -160,23 +179,38 @@ public class PanelTransaction extends BaseJPanel {
 				CategoryModel selectedCategory = (CategoryModel) comboCategory.getSelectedItem();
 				WalletModel selectedWallet = (WalletModel) comboWallet.getSelectedItem();
 
-				TransactionModel trans = new TransactionModel(-1, number, desc, current, current,
-						selectedCategory.getId(), selectedWallet.getId(), selectedCategory.getName(),
-						selectedWallet.getName());
-				addTrans(trans);
+				TransactionModel trans = new TransactionModel(-1, number, desc, current, current, selectedWallet,
+						selectedCategory);
 
+				addTransaction(trans, selectedCategory.isIncome());
+			}
+		});
+
+		btnUpdateButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateTransaction(selectedTM);
+			}
+		});
+
+		btnDeleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				deleteTransaction(selectedTM);
 			}
 		});
 	}
 
-	private void addTrans(TransactionModel model) {
+	private void addTransaction(TransactionModel model, boolean isIncome) {
 		if (model.getAmount() < 1) {
 			JOptionPane.showMessageDialog(this, "Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		// todo check selecgtedTM has data
 
-		String sql = "INSERT INTO transaction (amount, description, category_id, category_name, wallet_id, wallet_name, created_date, updated_date) VALUE (?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO transaction "
+				+ "(amount, description, category_id, wallet_id, created_date, updated_date) "
+				+ "VALUE (?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 
@@ -184,23 +218,81 @@ public class PanelTransaction extends BaseJPanel {
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setFloat(1, model.getAmount());
 			statement.setString(2, model.getDescription());
-			statement.setInt(3, model.getCategoryId());
-			statement.setString(4, model.getCategoryName());
-			statement.setInt(5, model.getWalletId());
-			statement.setString(6, model.getWalletName());
-			statement.setDate(7, model.getCreatedDate());
-			statement.setDate(8, model.getUpdatedDate());
-			
+			statement.setInt(3, model.getCategoryModel().getId());
+			statement.setInt(4, model.getWalletModel().getId());
+			statement.setDate(5, model.getCreatedDate());
+			statement.setDate(6, model.getUpdatedDate());
+
 			statement.executeUpdate();
 		} catch (SQLException ee) {
 			DbHelper.printSQLException(ee);
 		}
-		
+
 		// refresh the transactions list
 		listViewTrans.setListData(DataController.transactions());
-		
+
 		// Clear amount & description text field
 		txtAmount.setText("");
 		txtDescription.setText("");
+	}
+
+	private void updateTransaction(TransactionModel tm) {
+
+		if (tm == null) {
+			JOptionPane.showMessageDialog(this, "Please select transatcion!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		System.out.println(tm.getDescription());
+
+		String sql = "UPDATE transaction SET "
+				+ "amount = ?, description = ?, category_id = ?, wallet_id = ?, updated_date = ?  WHERE t_id = ?";
+		try {
+			Connection connection = DbHelper.connection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setFloat(1, tm.getAmount());
+			statement.setString(2, tm.getDescription());
+			statement.setInt(3, tm.getCategoryModel().getId());
+			statement.setInt(4, tm.getWalletModel().getId());
+			final Date currentUpdatedDate = new Date(System.currentTimeMillis());
+			statement.setDate(5, currentUpdatedDate);
+			statement.setInt(6, tm.getId());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			DbHelper.printSQLException(e);
+		}
+
+		// refresh the wallet list
+		listViewTrans.setListData(DataController.transactions());
+		// Clear wallet name text field
+		txtAmount.setText("");
+		txtDescription.setText("");
+	}
+
+	private void deleteTransaction(TransactionModel tm) {
+		if (tm == null) {
+			JOptionPane.showMessageDialog(this, "Please select tranction!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		String sql = "DELETE FROM transaction WHERE id = ?";
+
+		try {
+			Connection connection = DbHelper.connection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, tm.getId());
+			statement.executeUpdate();
+
+		} catch (SQLException ee) {
+			DbHelper.printSQLException(ee);
+		}
+
+		// refresh the transactions list
+		listViewTrans.setListData(DataController.transactions());
+
+		// Clear amount & description text field
+		txtAmount.setText("");
+		txtDescription.setText("");
+
 	}
 }

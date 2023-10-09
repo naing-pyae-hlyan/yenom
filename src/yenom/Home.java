@@ -54,6 +54,7 @@ public class Home extends JFrame {
 //					frame.setSize(screenSize);
 //					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					frame.setVisible(true);
+						
 					DbHelper.connect();
 				} catch (Exception e) {
 					e.printStackTrace();

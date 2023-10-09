@@ -234,7 +234,7 @@ public class PanelCategory extends BaseJPanel {
 			}
 		}
 
-		String sql = "INSERT INTO category (name, color, is_income) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO category (c_name, c_color, is_income) VALUES (?, ?, ?)";
 		try {
 			Connection connection = DbHelper.connection();
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -260,7 +260,7 @@ public class PanelCategory extends BaseJPanel {
 			JOptionPane.showMessageDialog(this, "Please select category!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		String sql = "UPDATE category SET name = ?, color = ?, is_income = ? WHERE id = ?";
+		String sql = "UPDATE category SET c_name = ?, c_color = ?, is_income = ? WHERE c_id = ?";
 		try {
 			Connection connection = DbHelper.connection();
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -283,16 +283,16 @@ public class PanelCategory extends BaseJPanel {
 
 	}
 
-	private void deleteCategory(CategoryModel wm) {
-		if (wm == null) {
+	private void deleteCategory(CategoryModel cm) {
+		if (cm == null) {
 			JOptionPane.showMessageDialog(this, "Please select category!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		String sql = "DELETE FROM category WHERE id = ?";
+		String sql = "DELETE FROM category WHERE c_id = ?";
 		try {
 			Connection connection = DbHelper.connection();
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, wm.getId());
+			statement.setInt(1, cm.getId());
 			statement.executeUpdate();
 
 		} catch (SQLException ee) {

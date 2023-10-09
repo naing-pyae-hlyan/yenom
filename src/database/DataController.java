@@ -34,9 +34,9 @@ public class DataController {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
 			while (result.next()) {
-				final int id = result.getInt("id");
-				final String name = result.getString("name");
-				final int color = result.getInt("color");
+				final int id = result.getInt("w_id");
+				final String name = result.getString("w_name");
+				final int color = result.getInt("w_color");
 				final int tot_income = result.getInt("total_income");
 				final int tot_expense = result.getInt("total_expense");
 
@@ -59,9 +59,9 @@ public class DataController {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
 			while (result.next()) {
-				final int id = result.getInt("id");
-				final String name = result.getString("name");
-				final int color = result.getInt("color");
+				final int id = result.getInt("c_id");
+				final String name = result.getString("c_name");
+				final int color = result.getInt("c_color");
 				final boolean isIncome = result.getBoolean("is_income");
 
 				categories.add(new CategoryModel(id, name, color, isIncome));
@@ -76,25 +76,29 @@ public class DataController {
 	public static List<TransactionModel> getTransactions() {
 		List<TransactionModel> trans = new ArrayList<>();
 
-		String sql = "SELECT * FROM transaction";
+		String sql = "SELECT * FROM transaction T " + "LEFT JOIN category C ON T.category_id = C.c_id "
+				+ "LEFT JOIN wallet W ON T.wallet_id = W.w_id";
 
 		try {
 			Connection connection = DbHelper.connection();
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
 			while (result.next()) {
-				final int id = result.getInt("id");
+				final int id = result.getInt("t_id");
 				final float amount = result.getFloat("amount");
 				final String desc = result.getString("description");
 				final Date createdDate = result.getDate("created_date");
 				final Date updatedDate = result.getDate("updated_date");
 				final int categoryId = result.getInt("category_id");
 				final int walletId = result.getInt("wallet_id");
-				final String categoryName = result.getString("category_name");
-				final String walletName = result.getString("wallet_name");
 
-				trans.add(new TransactionModel(id, amount, desc, createdDate, updatedDate, categoryId, walletId,
-						categoryName, walletName));
+				final WalletModel walletModel = new WalletModel(walletId, result.getString("w_name"),
+						result.getInt("w_color"), result.getFloat("total_income"), result.getFloat("total_expense"));
+
+				final CategoryModel categoryModel = new CategoryModel(categoryId, result.getString("c_name"),
+						result.getInt("c_color"), result.getBoolean("is_income"));
+
+				trans.add(new TransactionModel(id, amount, desc, createdDate, updatedDate, walletModel, categoryModel));
 			}
 		} catch (SQLException e) {
 			DbHelper.printSQLException(e);

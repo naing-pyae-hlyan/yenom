@@ -4,10 +4,10 @@ public class WalletModel {
 	private int id;
 	private String name;
 	private int color;
-	private int totalIncome;
-	private int totalExpense;
+	private float totalIncome;
+	private float totalExpense;
 
-	public WalletModel(int id, String name, int color, int totalIncome, int totalExpense) {
+	public WalletModel(int id, String name, int color, float totalIncome, float totalExpense) {
 		super();
 		this.setId(id);
 		this.setName(name);
@@ -40,22 +40,22 @@ public class WalletModel {
 		this.color = color;
 	}
 
-	public int getTotalIncome() {
+	public float getTotalIncome() {
 		return totalIncome;
 	}
 
-	public void setTotalIncome(int totalIncome) {
+	public void setTotalIncome(float totalIncome) {
 		this.totalIncome = totalIncome;
 	}
 
-	public int getTotalExpense() {
+	public float getTotalExpense() {
 		return totalExpense;
 	}
 
-	public void setTotalExpense(int totalExpense) {
+	public void setTotalExpense(float totalExpense) {
 		this.totalExpense = totalExpense;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
