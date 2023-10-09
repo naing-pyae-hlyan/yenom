@@ -15,6 +15,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Properties;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -107,6 +108,7 @@ public class PanelTransaction extends BaseJPanel {
 		txtAmount.setFont(new Font("Default", Font.PLAIN, 13));
 		txtAmount.setHorizontalAlignment(SwingConstants.LEFT);
 		txtAmount.setBounds(503, 234, 292, 64);
+		txtAmount.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
 		add(txtAmount);
 
 		JLabel lblDesc = new JLabel("Description");
@@ -118,6 +120,7 @@ public class PanelTransaction extends BaseJPanel {
 		txtDescription.setFont(new Font("Default", Font.PLAIN, 13));
 		txtDescription.setHorizontalAlignment(SwingConstants.LEFT);
 		txtDescription.setBounds(503, 326, 292, 64);
+		txtDescription.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
 		add(txtDescription);
 
 		JButton btnNewButton = new JButton("");
@@ -141,16 +144,15 @@ public class PanelTransaction extends BaseJPanel {
 				if (listViewTrans.isSelectionEmpty()) {
 					return;
 				}
-
 				int index = listViewTrans.locationToIndex(e.getPoint());
-
 				if (index < 0) {
 					return;
 				}
 
 				selectedTM = listViewTrans.getModel().getElementAt(index);
 				if (selectedTM != null) {
-//					comboWallet.setSelectedItem(selectedTM.getWal);
+					comboWallet.getModel().setSelectedItem(selectedTM.getWalletModel());
+					comboCategory.getModel().setSelectedItem(selectedTM.getCategoryModel());
 					txtAmount.setText(String.valueOf(selectedTM.getAmount()));
 					if (selectedTM.getDescription() != null) {
 						txtDescription.setText(selectedTM.getDescription());
@@ -162,43 +164,54 @@ public class PanelTransaction extends BaseJPanel {
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String amount = txtAmount.getText();
-				float number = 0;
-				try {
-					number = Float.parseFloat(amount);
+				final float amount = parsingStringAmountToFloat(txtAmount.getText());
+				final String desc = txtDescription.getText();
+				final Date current = new Date(System.currentTimeMillis());
+				final WalletModel wm = (WalletModel) comboWallet.getSelectedItem();
+				final CategoryModel cm = (CategoryModel) comboCategory.getSelectedItem();
+				final TransactionModel trans = new TransactionModel(-1, amount, desc, current, current, wm, cm);
 
-				} catch (NumberFormatException exception) {
-					JOptionPane.showMessageDialog(new JPanel(), "Please enter amount!", "Error",
-							JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-
-				String desc = txtDescription.getText();
-				Date current = new Date(System.currentTimeMillis());
-
-				CategoryModel selectedCategory = (CategoryModel) comboCategory.getSelectedItem();
-				WalletModel selectedWallet = (WalletModel) comboWallet.getSelectedItem();
-
-				TransactionModel trans = new TransactionModel(-1, number, desc, current, current, selectedWallet,
-						selectedCategory);
-
-				addTransaction(trans, selectedCategory.isIncome());
+				addTransaction(trans, cm.isIncome());
 			}
 		});
 
 		btnUpdateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				updateTransaction(selectedTM);
+				if (listViewTrans.isSelectionEmpty()) {
+					return;
+				}
+				final float amount = parsingStringAmountToFloat(txtAmount.getText());
+				final String desc = txtDescription.getText();
+				final WalletModel wm = (WalletModel) comboWallet.getSelectedItem();
+				final CategoryModel cm = (CategoryModel) comboCategory.getSelectedItem();
+				final TransactionModel tm = new TransactionModel(selectedTM.getId(), amount, desc, null, null, wm, cm);
+				updateTransaction(tm);
 			}
 		});
 
 		btnDeleteButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (listViewTrans.isSelectionEmpty()) {
+					return;
+				}
 				deleteTransaction(selectedTM);
 			}
 		});
+	}
+
+	private float parsingStringAmountToFloat(String str) {
+		float number = 0;
+		try {
+			number = Float.parseFloat(str);
+
+		} catch (NumberFormatException exception) {
+			JOptionPane.showMessageDialog(new JPanel(), "Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
+			return number;
+		}
+
+		return number;
 	}
 
 	private void addTransaction(TransactionModel model, boolean isIncome) {
@@ -210,7 +223,7 @@ public class PanelTransaction extends BaseJPanel {
 
 		String sql = "INSERT INTO transaction "
 				+ "(amount, description, category_id, wallet_id, created_date, updated_date) "
-				+ "VALUE (?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "VALUE (?, ?, ?, ?, ?, ?)";
 
 		try {
 
@@ -242,7 +255,9 @@ public class PanelTransaction extends BaseJPanel {
 			JOptionPane.showMessageDialog(this, "Please select transatcion!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		System.out.println(tm.getDescription());
+		System.out.println(tm.getAmount());
+		System.out.println(tm.getWalletModel().getName());
+		System.out.println(tm.getCategoryModel().getName());
 
 		String sql = "UPDATE transaction SET "
 				+ "amount = ?, description = ?, category_id = ?, wallet_id = ?, updated_date = ?  WHERE t_id = ?";
@@ -253,8 +268,7 @@ public class PanelTransaction extends BaseJPanel {
 			statement.setString(2, tm.getDescription());
 			statement.setInt(3, tm.getCategoryModel().getId());
 			statement.setInt(4, tm.getWalletModel().getId());
-			final Date currentUpdatedDate = new Date(System.currentTimeMillis());
-			statement.setDate(5, currentUpdatedDate);
+			statement.setDate(5, new Date(System.currentTimeMillis()));
 			statement.setInt(6, tm.getId());
 
 			statement.executeUpdate();

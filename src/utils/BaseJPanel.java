@@ -10,13 +10,13 @@ public abstract class BaseJPanel extends JPanel {
 		setVisible(true);
 		setBounds(6, 0, 862, 564);
 		setLayout(null);
-		System.out.println("createUi -> " + arg);
+//		System.out.println("createUi -> " + arg);
 	}
 
 	public void disposeUi(String arg) {
 		setVisible(false);
 		removeAll();
-		System.out.println("disposedUi -> " + arg);
+//		System.out.println("disposedUi -> " + arg);
 	}
 
 }

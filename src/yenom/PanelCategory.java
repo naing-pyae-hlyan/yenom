@@ -14,6 +14,7 @@ import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -87,6 +88,7 @@ public class PanelCategory extends BaseJPanel {
 		txtCategoryName.setFont(new Font("Default", Font.PLAIN, 13));
 		txtCategoryName.setHorizontalAlignment(SwingConstants.LEFT);
 		txtCategoryName.setBounds(503, 107, 292, 64);
+		txtCategoryName.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
 		add(txtCategoryName);
 
 		JLabel lblTextfield2 = new JLabel("Category Color");
@@ -199,6 +201,10 @@ public class PanelCategory extends BaseJPanel {
 		btnUpdateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (listViewCategory.isSelectionEmpty()) {
+					return;
+				}
+
 				String name = txtCategoryName.getText();
 				int color = selectedColor.getRGB();
 				boolean isIncome = eiEnum == EIEnum.income ? true : false;
@@ -209,6 +215,10 @@ public class PanelCategory extends BaseJPanel {
 		btnDeleteButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (listViewCategory.isSelectionEmpty()) {
+					return;
+				}
+
 				deleteCategory(selectedCM);
 			}
 		});

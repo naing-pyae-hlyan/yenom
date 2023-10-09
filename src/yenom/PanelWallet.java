@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -79,6 +81,7 @@ public class PanelWallet extends BaseJPanel {
 		txtWalletName.setFont(new Font("Default", Font.PLAIN, 13));
 		txtWalletName.setHorizontalAlignment(SwingConstants.LEFT);
 		txtWalletName.setBounds(503, 176, 292, 64);
+		txtWalletName.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
 		add(txtWalletName);
 
 		JLabel lblTextfield2 = new JLabel("Wallet Color");
@@ -154,6 +157,9 @@ public class PanelWallet extends BaseJPanel {
 
 		btnUpdateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (listViewWallet.isSelectionEmpty()) {
+					return;
+				}
 				String name = txtWalletName.getText();
 				int color = selectedColor.getRGB();
 				updateWallet(selectedWM, name, color);
@@ -162,6 +168,9 @@ public class PanelWallet extends BaseJPanel {
 
 		btnDeleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (listViewWallet.isSelectionEmpty()) {
+					return;
+				}
 				deleteWallet(selectedWM);
 			}
 		});
