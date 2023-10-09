@@ -1,22 +1,27 @@
 package yenom;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
-
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.sql.Date;
-import java.util.List;
-import java.util.Properties;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -28,6 +33,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import utils.*;
 import database.*;
@@ -36,6 +43,9 @@ import renderer.*;
 public class PanelTransaction extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	private JPanel lPanel;
+	private JPanel rPanel;
 
 	private JList<TransactionModel> listViewTrans;
 	private JTextField txtAmount;
@@ -54,13 +64,24 @@ public class PanelTransaction extends BaseJPanel {
 	}
 
 	@Override
-	public void disposeUi(String arg) {
-		super.disposeUi(arg);
+	public void disposeUi() {
+		super.disposeUi();
 	}
 
 	@Override
-	public void createUi(String arg) {
-		super.createUi(arg);
+	public void createUi(Dimension size) {
+		super.createUi(size);
+
+		final int halfOfWidth = (int) (size.width / 2);
+		final Dimension dimension = new Dimension(halfOfWidth, size.height);
+
+		lPanel = new JPanel();
+		lPanel.setSize(dimension);
+		lPanel.setPreferredSize(dimension);
+		rPanel = new JPanel();
+		rPanel.setSize(dimension);
+		rPanel.setPreferredSize(dimension);
+		rPanel.setLayout(new BoxLayout(rPanel, BoxLayout.Y_AXIS));
 
 		listViewTrans = new JList<>();
 		listViewTrans.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -69,75 +90,99 @@ public class PanelTransaction extends BaseJPanel {
 		listViewTrans.setListData(DataController.transactions());
 
 		scrollPane = new JScrollPane(listViewTrans); // load wallet list
-		scrollPane.setBounds(6, 6, 430, 560);
-		add(scrollPane);
+		scrollPane.setSize(dimension);
+		scrollPane.setPreferredSize(dimension);
+		lPanel.add(scrollPane);
 
+		// Right Part
 		JLabel lblTitle = new JLabel("Manage Transaction");
-		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setFont(new Font("Default", Font.PLAIN, 24));
-		lblTitle.setBounds(531, 6, 237, 33);
-		add(lblTitle);
+		lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+		rPanel.add(lblTitle);
+		rPanel.add(Box.createVerticalStrut(16));
 
-		JLabel lblWallet = new JLabel("Wallet");
-		lblWallet.setFont(new Font("Default", Font.PLAIN, 13));
-		lblWallet.setBounds(505, 65, 114, 16);
-		add(lblWallet);
+		//
+		JPanel walletPanel = new JPanel();
+		walletPanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Select Wallet"));
+		walletPanel.setLayout(new GridLayout(1, 1));
+		walletPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
+		// Wallet Dropdown
 		WalletModel[] wallets = DataController.getWallets().toArray(new WalletModel[0]);
 		comboWallet = new JComboBox<WalletModel>(wallets);
-		comboWallet.setBounds(503, 66, 292, 64);
-		add(comboWallet);
+		walletPanel.add(comboWallet);
+		rPanel.add(walletPanel);
+		rPanel.add(Box.createVerticalStrut(16));
 
-		JLabel lblCategory = new JLabel("Category");
-		lblCategory.setFont(new Font("Default", Font.PLAIN, 13));
-		lblCategory.setBounds(505, 141, 114, 16);
-		add(lblCategory);
+		// -------------------------------------------------------------
 
-		// TODO need to refresh combo list when new item[wallet or category] is
-		// added.
+		//
+		JPanel categoryPanel = new JPanel();
+		categoryPanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Select Category"));
+		categoryPanel.setLayout(new GridLayout(1, 1));
+		categoryPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
+
+		// Category Dropdown
 		CategoryModel[] categories = DataController.categories();
 		comboCategory = new JComboBox<CategoryModel>(categories);
-		comboCategory.setBounds(503, 142, 292, 64);
-		add(comboCategory);
+		categoryPanel.add(comboCategory, BorderLayout.CENTER);
+		rPanel.add(categoryPanel);
+		rPanel.add(Box.createVerticalStrut(16));
 
-		JLabel lblAmount = new JLabel("Amount *");
-		lblAmount.setFont(new Font("Default", Font.PLAIN, 13));
-		lblAmount.setBounds(505, 217, 114, 16);
-		add(lblAmount);
+		// -------------------------------------------------------------
 
-		txtAmount = new JTextField("");
+		//
+		JPanel amountPanel = new JPanel();
+		amountPanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Enter Amount *"));
+		amountPanel.setLayout(new GridLayout(1, 1));
+		amountPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
+
+		// Amount Input
+		txtAmount = new JTextField(20);
 		txtAmount.setFont(new Font("Default", Font.PLAIN, 13));
-		txtAmount.setHorizontalAlignment(SwingConstants.LEFT);
-		txtAmount.setBounds(503, 234, 292, 64);
-		txtAmount.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
-		add(txtAmount);
+		txtAmount.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+		amountPanel.add(txtAmount, BorderLayout.CENTER);
+		rPanel.add(amountPanel);
+		rPanel.add(Box.createVerticalStrut(16));
 
-		JLabel lblDesc = new JLabel("Description");
-		lblDesc.setFont(new Font("Default", Font.PLAIN, 13));
-		lblDesc.setBounds(505, 309, 114, 16);
-		add(lblDesc);
+		// -------------------------------------------------------------
 
-		txtDescription = new JTextField("");
+		//
+		JPanel descPanel = new JPanel();
+		descPanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Enter Description"));
+		descPanel.setLayout(new GridLayout(1, 1));
+		descPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
+
+		txtDescription = new JTextField(20);
 		txtDescription.setFont(new Font("Default", Font.PLAIN, 13));
-		txtDescription.setHorizontalAlignment(SwingConstants.LEFT);
-		txtDescription.setBounds(503, 326, 292, 64);
-		txtDescription.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
-		add(txtDescription);
+		txtDescription.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+		descPanel.add(txtDescription, BorderLayout.CENTER);
+		rPanel.add(descPanel);
+		rPanel.add(Box.createVerticalStrut(16));
 
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(505, 414, 64, 64);
-		btnNewButton.setIcon(new ImageIcon(MyIcons.logo_add_48));
-		add(btnNewButton);
+		// -------------------------------------------------------------
 
-		JButton btnUpdateButton = new JButton("");
-		btnUpdateButton.setBounds(619, 414, 64, 64);
-		btnUpdateButton.setIcon(new ImageIcon(MyIcons.logo_update_48));
-		add(btnUpdateButton);
+		//
+		JPanel btnsPanel = new JPanel();
+		btnsPanel.setBorder(new EmptyBorder(5, 0, 5, 5));
+		btnsPanel.setLayout(new GridLayout(1, 3));
+		btnsPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
-		JButton btnDeleteButton = new JButton("");
-		btnDeleteButton.setBounds(733, 414, 64, 64);
-		btnDeleteButton.setIcon(new ImageIcon(MyIcons.logo_delete_48));
-		add(btnDeleteButton);
+		JButton btnNewButton = new JButton("Add");
+		btnsPanel.add(btnNewButton);
+
+		JButton btnUpdateButton = new JButton("Update");
+		btnsPanel.add(btnUpdateButton);
+
+		JButton btnDeleteButton = new JButton("Delete");
+		btnsPanel.add(btnDeleteButton);
+		rPanel.add(btnsPanel);
+
+		rPanel.add(Box.createVerticalGlue());
+
+		add(lPanel);
+		add(rPanel);
+		// -------------------------------------------------------------
 
 		listViewTrans.addMouseListener(new MouseAdapter() {
 			@Override
@@ -207,7 +252,7 @@ public class PanelTransaction extends BaseJPanel {
 		try {
 			number = Float.parseFloat(str);
 		} catch (NumberFormatException exception) {
-			JOptionPane.showMessageDialog(new JPanel(), "Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
+//			JOptionPane.showMessageDialog(new JPanel(), "Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
 			return number;
 		}
 
@@ -237,19 +282,19 @@ public class PanelTransaction extends BaseJPanel {
 			insertStatement.setDate(6, tm.getUpdatedDate());
 			insertStatement.executeUpdate();
 
-			// SUM and update the current total_income and total_expense values
-			String columnName;
-			if (isIncome) {
-				columnName = "total_income";
-			} else {
-				columnName = "total_expense";
-			}
-
-			String calcAndUpdateSQL = "UPDATE wallet SET " + columnName + " = " + columnName + " + ? WHERE w_id = ?";
-			PreparedStatement calcAndUpdateStatement = connection.prepareStatement(calcAndUpdateSQL);
-			calcAndUpdateStatement.setFloat(1, tm.getAmount());
-			calcAndUpdateStatement.setInt(2, tm.getWalletModel().getId());
-			calcAndUpdateStatement.executeUpdate();
+			// Calc and update the current total_income and total_expense values
+//			String columnName;
+//			if (isIncome) {
+//				columnName = "total_income";
+//			} else {
+//				columnName = "total_expense";
+//			}
+//
+//			String calcAndUpdateSQL = "UPDATE wallet SET " + columnName + " = " + columnName + " + ? WHERE w_id = ?";
+//			PreparedStatement calcAndUpdateStatement = connection.prepareStatement(calcAndUpdateSQL);
+//			calcAndUpdateStatement.setFloat(1, tm.getAmount());
+//			calcAndUpdateStatement.setInt(2, tm.getWalletModel().getId());
+//			calcAndUpdateStatement.executeUpdate();
 
 		} catch (SQLException ee) {
 			DbHelper.printSQLException(ee);
@@ -270,10 +315,38 @@ public class PanelTransaction extends BaseJPanel {
 			return;
 		}
 
-		String sql = "UPDATE transaction SET "
-				+ "amount = ?, description = ?, category_id = ?, wallet_id = ?, updated_date = ?  WHERE t_id = ?";
 		try {
 			Connection connection = DbHelper.connection();
+
+//			final String retrieveCurrentSelectedTransAmountSQL = "SELECT amount FROM transaction WHERE t_id = ?";
+//			PreparedStatement retrieveStatement = connection.prepareStatement(retrieveCurrentSelectedTransAmountSQL);
+//			retrieveStatement.setInt(1, tm.getId());
+//			ResultSet retrieveResult = retrieveStatement.executeQuery();
+//			float currentAmount = 0;
+//			if (retrieveResult.next()) {
+//				currentAmount = retrieveResult.getFloat("amount");
+//			}
+
+//			if (currentAmount != tm.getAmount()) {
+//			String columnName;
+//			if (tm.getCategoryModel().isIncome()) {
+//				columnName = "total_income";
+//			} else {
+//				columnName = "total_expense";
+//			}
+//			final String updateAmountSQL = "UPDATE wallet SET " + columnName + " = " + columnName + " - "
+//					+ currentAmount + " + ?" + " WHERE w_id = ?";
+//
+//			PreparedStatement updateAmountStatement = connection.prepareStatement(updateAmountSQL);
+//			updateAmountStatement.setFloat(1, tm.getAmount());
+//			updateAmountStatement.setInt(2, tm.getWalletModel().getId());
+//			updateAmountStatement.executeUpdate();
+//			System.out.println(
+//					tm.getWalletModel().getName() + "	" + columnName + "	" + tm.getAmount() + "	" + currentAmount);
+//			}
+
+			final String sql = "UPDATE transaction SET "
+					+ "amount = ?, description = ?, category_id = ?, wallet_id = ?, updated_date = ?  WHERE t_id = ?";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setFloat(1, tm.getAmount());
 			statement.setString(2, tm.getDescription());
@@ -308,38 +381,36 @@ public class PanelTransaction extends BaseJPanel {
 			deleteStatement.setInt(1, tm.getId());
 			deleteStatement.executeUpdate();
 
-			// Update the current total_income and total_expense values
-			String columnName;
-			if (tm.getCategoryModel().isIncome()) {
-				columnName = "total_income";
-			} else {
-				columnName = "total_expense";
-			}
-
-			// Retrieve the trans amount before delete
-			final String retrieveAmountSQL = "SELECT " + columnName + " FROM wallet WHERE w_id = ?";
-			PreparedStatement retrieveStatement = connection.prepareStatement(retrieveAmountSQL);
-			retrieveStatement.setInt(1, tm.getWalletModel().getId());
-			ResultSet retrieveResult = retrieveStatement.executeQuery();
-			float currentAmount = 0;
-			if (retrieveResult.next()) {
-				currentAmount = retrieveResult.getFloat(columnName);
-			}
-
-			if (currentAmount > 0) {
-				final String calcAndDeleteSQL = "UPDATE wallet SET " + columnName + " = " + columnName
-						+ " - ? WHERE w_id = ?";
-				PreparedStatement calcAndDeleteStatement = connection.prepareStatement(calcAndDeleteSQL);
-				calcAndDeleteStatement.setFloat(1, tm.getAmount());
-				calcAndDeleteStatement.setInt(2, tm.getWalletModel().getId());
-				calcAndDeleteStatement.executeUpdate();
-			} else if (currentAmount < 0) {
-				final String setDefaultZeroSQL = "UPDATE wallet SET " + columnName + " = ? WHERE w_id = ?";
-				PreparedStatement setDefaultZeroStatement = connection.prepareStatement(setDefaultZeroSQL);
-				setDefaultZeroStatement.setFloat(1, 0);
-				setDefaultZeroStatement.setInt(2, tm.getWalletModel().getId());
-				setDefaultZeroStatement.executeUpdate();
-			}
+			// Retrieve the all total amount after delete
+//			String columnName;
+//			if (tm.getCategoryModel().isIncome()) {
+//				columnName = "total_income";
+//			} else {
+//				columnName = "total_expense";
+//			}
+//			final String retrieveAmountSQL = "SELECT " + columnName + " FROM wallet WHERE w_id = ?";
+//			PreparedStatement retrieveStatement = connection.prepareStatement(retrieveAmountSQL);
+//			retrieveStatement.setInt(1, tm.getWalletModel().getId());
+//			ResultSet retrieveResult = retrieveStatement.executeQuery();
+//			float currentAmount = 0;
+//			if (retrieveResult.next()) {
+//				currentAmount = retrieveResult.getFloat(columnName);
+//			}
+//
+//			if (currentAmount > 0) {
+//				final String calcAndDeleteSQL = "UPDATE wallet SET " + columnName + " = " + columnName
+//						+ " - ? WHERE w_id = ?";
+//				PreparedStatement calcAndDeleteStatement = connection.prepareStatement(calcAndDeleteSQL);
+//				calcAndDeleteStatement.setFloat(1, tm.getAmount());
+//				calcAndDeleteStatement.setInt(2, tm.getWalletModel().getId());
+//				calcAndDeleteStatement.executeUpdate();
+//			} else if (currentAmount < 0) {
+//				final String setDefaultZeroSQL = "UPDATE wallet SET " + columnName + " = ? WHERE w_id = ?";
+//				PreparedStatement setDefaultZeroStatement = connection.prepareStatement(setDefaultZeroSQL);
+//				setDefaultZeroStatement.setFloat(1, 0);
+//				setDefaultZeroStatement.setInt(2, tm.getWalletModel().getId());
+//				setDefaultZeroStatement.executeUpdate();
+//			}
 
 		} catch (SQLException ee) {
 			DbHelper.printSQLException(ee);

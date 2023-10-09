@@ -2,11 +2,14 @@ package yenom;
 
 import javax.swing.JPanel;
 
+
 import javax.swing.SwingConstants;
 
 import renderer.*;
 
 import javax.swing.JLabel;
+
+import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
@@ -24,8 +27,8 @@ public class PanelDashboard extends BaseJPanel {
 	private static JButton[] arrayBtn;
 
 	@Override
-	public void disposeUi(String arg) {
-		super.disposeUi(arg);
+	public void disposeUi() {
+		super.disposeUi();
 	}
 
 	/**
@@ -33,12 +36,11 @@ public class PanelDashboard extends BaseJPanel {
 	 */
 	public PanelDashboard() {
 		setLayout(new GridLayout(1, 0, 0, 0));
-		createUi("");
 	}
 
 	@Override
-	public void createUi(String arg) {
-		super.createUi(arg);
+	public void createUi(Dimension size) {
+		super.createUi(size);
 
 		GridLayout gridLayout = new GridLayout(5, 3, 10, 10);
 		setLayout(gridLayout);

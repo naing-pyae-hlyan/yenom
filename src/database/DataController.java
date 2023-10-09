@@ -82,7 +82,7 @@ public class DataController {
 		String sql = "SELECT * FROM transaction T " + "LEFT JOIN category C ON T.category_id = C.c_id "
 				+ "LEFT JOIN wallet W ON T.wallet_id = W.w_id";
 
-		try {
+		try { 
 			Connection connection = DbHelper.connection();
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
@@ -109,27 +109,4 @@ public class DataController {
 
 		return trans;
 	}
-
-//	public static void culcWalletTotalAmount(TransactionModel tm, boolean isIncome) {
-//		String columnName;set
-//		if (isIncome) {
-//			columnName = "total_income";
-//		} else {
-//			columnName = "total_expense";
-//		}
-//
-//		String sql = "UPDATE wallet SET " + columnName + " = " + columnName + " + ? WHERE w_id = ?";
-//
-//		try {
-//			Connection connection = DbHelper.connection();
-//			PreparedStatement statement = connection.prepareStatement(sql);
-//			statement.setFloat(1, tm.getAmount());
-//			statement.setInt(2, tm.getWalletModel().getId());
-//			statement.executeUpdate();
-//
-//		} catch (SQLException e) {
-//			DbHelper.printSQLException(e);
-//		}
-//
-//	}
 }

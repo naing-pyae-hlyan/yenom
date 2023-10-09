@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 import adapter.DrawerButtonMouseAdapter;
 import database.DbHelper;
@@ -18,7 +19,7 @@ import utils.*;
 public class Home extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private int drawerWidth = 212; 
+	private int drawerWidth = 212;
 
 	private String selectedLeftPanelName;
 
@@ -37,6 +38,10 @@ public class Home extends JFrame {
 	private PanelTransaction panelTransaction = new PanelTransaction();
 	private PanelCategory panelCategory = new PanelCategory();
 	private PanelWallet panelWallet = new PanelWallet();
+
+	private static int appWidth = 0;
+	private static int appHeight = 0;
+	private int rightPanelWidth = 0;
 //	private PanelTrash trash;
 //	private PanelSetting setting;
 
@@ -50,11 +55,10 @@ public class Home extends JFrame {
 					Home frame = new Home();
 					frame.setTitle("Yenom-Project");
 					// Get the screen size of computer
-//					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//					frame.setSize(screenSize);
-//					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+					frame.setSize(new Dimension(appWidth, appHeight));
 					frame.setVisible(true);
-						
+
 					DbHelper.connect();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,14 +68,21 @@ public class Home extends JFrame {
 	}
 
 	public Home() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		appWidth = (int) (screenSize.getWidth() * 0.8);
+		appHeight = (int) (screenSize.getHeight() * 0.8);
+		drawerWidth = (int) (appWidth * 0.15);
+		rightPanelWidth = (int) (appWidth * 0.85);
+
 		setBackground(new Color(255, 255, 255));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1075, 600);
+//		setBounds(100, 100, 1075, 600);
 
 		JPanel panelLeft = new JPanel();
-		panelLeft.setPreferredSize(new Dimension(drawerWidth, 0));
+//		panelLeft.setPreferredSize(new Dimension(drawerWidth, 0));
 		panelLeft.setBackground(MyColors.primaryColor());
 		panelLeft.setLayout(null);
+		System.out.println(appWidth);
 
 		JPanel panelRight = new JPanel();
 		panelRight.setLayout(null);
@@ -81,7 +92,8 @@ public class Home extends JFrame {
 		panelRight.add(panelWallet);
 
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.2);
+		splitPane.setResizeWeight(0);
+		splitPane.setEnabled(false);
 		splitPane.setLeftComponent(panelLeft);
 		splitPane.setRightComponent(panelRight);
 		splitPane.setOneTouchExpandable(false);
@@ -225,12 +237,12 @@ public class Home extends JFrame {
 			return;
 		selectedLeftPanelName = leftPanelItem.getName();
 
-		panelDashboard.disposeUi("Dashboard");
-		panelTransaction.disposeUi("Transaction");
-		panelCategory.disposeUi("Category");
-		panelWallet.disposeUi("Wallet");
+		panelDashboard.disposeUi();
+		panelTransaction.disposeUi();
+		panelCategory.disposeUi();
+		panelWallet.disposeUi();
 
-		rightPanel.createUi(arg);
+		rightPanel.createUi(new Dimension(rightPanelWidth, appHeight));
 
 		leftDashboard.setBackground(MyColors.primaryColor());
 		leftTransactions.setBackground(MyColors.primaryColor());
