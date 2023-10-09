@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -51,6 +52,7 @@ public class PanelWallet extends BaseJPanel {
 	@Override
 	public void createUi(Dimension size) {
 		super.createUi(size);
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		listViewWallet = new JList<>();
 		listViewWallet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

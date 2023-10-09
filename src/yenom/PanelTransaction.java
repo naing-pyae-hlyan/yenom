@@ -1,15 +1,10 @@
 package yenom;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -22,7 +17,6 @@ import java.sql.Date;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -32,7 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
@@ -71,6 +64,8 @@ public class PanelTransaction extends BaseJPanel {
 	@Override
 	public void createUi(Dimension size) {
 		super.createUi(size);
+		System.out.println(size.width + "  " + size.height);
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		final int halfOfWidth = (int) (size.width / 2);
 		final Dimension dimension = new Dimension(halfOfWidth, size.height);
@@ -252,7 +247,6 @@ public class PanelTransaction extends BaseJPanel {
 		try {
 			number = Float.parseFloat(str);
 		} catch (NumberFormatException exception) {
-//			JOptionPane.showMessageDialog(new JPanel(), "Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
 			return number;
 		}
 

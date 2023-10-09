@@ -57,6 +57,7 @@ public class Home extends JFrame {
 					// Get the screen size of computer
 
 					frame.setSize(new Dimension(appWidth, appHeight));
+//					frame.setResizable(false);
 					frame.setVisible(true);
 
 					DbHelper.connect();
@@ -82,7 +83,8 @@ public class Home extends JFrame {
 //		panelLeft.setPreferredSize(new Dimension(drawerWidth, 0));
 		panelLeft.setBackground(MyColors.primaryColor());
 		panelLeft.setLayout(null);
-		System.out.println(appWidth);
+		System.out.println("app-width: " + appWidth + ", app-height: " + appHeight + ", drawer-width: " + drawerWidth
+				+ ", right-panel-width: " + rightPanelWidth);
 
 		JPanel panelRight = new JPanel();
 		panelRight.setLayout(null);
@@ -242,7 +244,7 @@ public class Home extends JFrame {
 		panelCategory.disposeUi();
 		panelWallet.disposeUi();
 
-		rightPanel.createUi(new Dimension(rightPanelWidth, appHeight));
+		rightPanel.createUi(new Dimension(rightPanelWidth, appHeight - 42));
 
 		leftDashboard.setBackground(MyColors.primaryColor());
 		leftTransactions.setBackground(MyColors.primaryColor());

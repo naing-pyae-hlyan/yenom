@@ -12,14 +12,12 @@ public abstract class BaseJPanel extends JPanel {
 		repaint();
 		setVisible(true);
 		setBounds(8, 4, size.width, size.height);
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-//		System.out.println("createUi -> " + arg);
+//		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 	}
 
 	public void disposeUi() {
 		setVisible(false);
 		removeAll();
-//		System.out.println("disposedUi -> " + arg);
 	}
 
 }
