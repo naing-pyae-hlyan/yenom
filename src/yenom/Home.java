@@ -18,7 +18,7 @@ import utils.*;
 public class Home extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private int drawerWidth = 212;
+	private int drawerWidth = 212; 
 
 	private String selectedLeftPanelName;
 

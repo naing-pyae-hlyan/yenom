@@ -62,7 +62,7 @@ public class TransactionModel {
 
 	public void setUpdatedDate(Date datetime) {
 		this.updatedDate = datetime;
-	}
+	} 
 
 
 	public WalletModel getWalletModel() {

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.awt.event.MouseAdapter;
@@ -205,7 +206,6 @@ public class PanelTransaction extends BaseJPanel {
 		float number = 0;
 		try {
 			number = Float.parseFloat(str);
-
 		} catch (NumberFormatException exception) {
 			JOptionPane.showMessageDialog(new JPanel(), "Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
 			return number;
@@ -214,29 +214,43 @@ public class PanelTransaction extends BaseJPanel {
 		return number;
 	}
 
-	private void addTransaction(TransactionModel model, boolean isIncome) {
-		if (model.getAmount() < 1) {
+	private void addTransaction(TransactionModel tm, boolean isIncome) {
+		if (tm.getAmount() < 1) {
 			JOptionPane.showMessageDialog(this, "Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		// todo check selecgtedTM has data
-
-		String sql = "INSERT INTO transaction "
-				+ "(amount, description, category_id, wallet_id, created_date, updated_date) "
-				+ "VALUE (?, ?, ?, ?, ?, ?)";
 
 		try {
-
 			Connection connection = DbHelper.connection();
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setFloat(1, model.getAmount());
-			statement.setString(2, model.getDescription());
-			statement.setInt(3, model.getCategoryModel().getId());
-			statement.setInt(4, model.getWalletModel().getId());
-			statement.setDate(5, model.getCreatedDate());
-			statement.setDate(6, model.getUpdatedDate());
 
-			statement.executeUpdate();
+			// Insert the new transaction into the transaction table
+			String insertTransSQL = "INSERT INTO transaction "
+					+ "(amount, description, category_id, wallet_id, created_date, updated_date) "
+					+ "VALUE (?, ?, ?, ?, ?, ?)";
+
+			PreparedStatement insertStatement = connection.prepareStatement(insertTransSQL);
+			insertStatement.setFloat(1, tm.getAmount());
+			insertStatement.setString(2, tm.getDescription());
+			insertStatement.setInt(3, tm.getCategoryModel().getId());
+			insertStatement.setInt(4, tm.getWalletModel().getId());
+			insertStatement.setDate(5, tm.getCreatedDate());
+			insertStatement.setDate(6, tm.getUpdatedDate());
+			insertStatement.executeUpdate();
+
+			// SUM and update the current total_income and total_expense values
+			String columnName;
+			if (isIncome) {
+				columnName = "total_income";
+			} else {
+				columnName = "total_expense";
+			}
+
+			String calcAndUpdateSQL = "UPDATE wallet SET " + columnName + " = " + columnName + " + ? WHERE w_id = ?";
+			PreparedStatement calcAndUpdateStatement = connection.prepareStatement(calcAndUpdateSQL);
+			calcAndUpdateStatement.setFloat(1, tm.getAmount());
+			calcAndUpdateStatement.setInt(2, tm.getWalletModel().getId());
+			calcAndUpdateStatement.executeUpdate();
+
 		} catch (SQLException ee) {
 			DbHelper.printSQLException(ee);
 		}
@@ -255,9 +269,6 @@ public class PanelTransaction extends BaseJPanel {
 			JOptionPane.showMessageDialog(this, "Please select transatcion!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		System.out.println(tm.getAmount());
-		System.out.println(tm.getWalletModel().getName());
-		System.out.println(tm.getCategoryModel().getName());
 
 		String sql = "UPDATE transaction SET "
 				+ "amount = ?, description = ?, category_id = ?, wallet_id = ?, updated_date = ?  WHERE t_id = ?";
@@ -289,13 +300,46 @@ public class PanelTransaction extends BaseJPanel {
 			return;
 		}
 
-		String sql = "DELETE FROM transaction WHERE id = ?";
-
 		try {
 			Connection connection = DbHelper.connection();
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, tm.getId());
-			statement.executeUpdate();
+			// Delete the transaction form trans table
+			final String deleteTransSQL = "DELETE FROM transaction WHERE t_id = ?";
+			PreparedStatement deleteStatement = connection.prepareStatement(deleteTransSQL);
+			deleteStatement.setInt(1, tm.getId());
+			deleteStatement.executeUpdate();
+
+			// Update the current total_income and total_expense values
+			String columnName;
+			if (tm.getCategoryModel().isIncome()) {
+				columnName = "total_income";
+			} else {
+				columnName = "total_expense";
+			}
+
+			// Retrieve the trans amount before delete
+			final String retrieveAmountSQL = "SELECT " + columnName + " FROM wallet WHERE w_id = ?";
+			PreparedStatement retrieveStatement = connection.prepareStatement(retrieveAmountSQL);
+			retrieveStatement.setInt(1, tm.getWalletModel().getId());
+			ResultSet retrieveResult = retrieveStatement.executeQuery();
+			float currentAmount = 0;
+			if (retrieveResult.next()) {
+				currentAmount = retrieveResult.getFloat(columnName);
+			}
+
+			if (currentAmount > 0) {
+				final String calcAndDeleteSQL = "UPDATE wallet SET " + columnName + " = " + columnName
+						+ " - ? WHERE w_id = ?";
+				PreparedStatement calcAndDeleteStatement = connection.prepareStatement(calcAndDeleteSQL);
+				calcAndDeleteStatement.setFloat(1, tm.getAmount());
+				calcAndDeleteStatement.setInt(2, tm.getWalletModel().getId());
+				calcAndDeleteStatement.executeUpdate();
+			} else if (currentAmount < 0) {
+				final String setDefaultZeroSQL = "UPDATE wallet SET " + columnName + " = ? WHERE w_id = ?";
+				PreparedStatement setDefaultZeroStatement = connection.prepareStatement(setDefaultZeroSQL);
+				setDefaultZeroStatement.setFloat(1, 0);
+				setDefaultZeroStatement.setInt(2, tm.getWalletModel().getId());
+				setDefaultZeroStatement.executeUpdate();
+			}
 
 		} catch (SQLException ee) {
 			DbHelper.printSQLException(ee);

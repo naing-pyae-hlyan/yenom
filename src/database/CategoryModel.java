@@ -11,7 +11,7 @@ public class CategoryModel {
         this.setId(id);
         this.setName(name);
         this.setColor(color);
-        this.setIncome(isIncome);
+        this.setIncome(isIncome); 
     }
 
 	public int getId() {

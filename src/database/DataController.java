@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 public class DataController {
@@ -37,15 +38,17 @@ public class DataController {
 				final int id = result.getInt("w_id");
 				final String name = result.getString("w_name");
 				final int color = result.getInt("w_color");
-				final int tot_income = result.getInt("total_income");
-				final int tot_expense = result.getInt("total_expense");
+				final float tot_income = result.getInt("total_income");
+				final float tot_expense = result.getInt("total_expense");
+
+				System.out.println(name + "	I:" + tot_income + "	E:" + tot_expense);
 
 				wallets.add(new WalletModel(id, name, color, tot_income, tot_expense));
 			}
 		} catch (SQLException e) {
 			DbHelper.printSQLException(e);
 		}
-
+		System.out.println("---------------------------------------");
 		return wallets;
 	}
 
@@ -106,4 +109,27 @@ public class DataController {
 
 		return trans;
 	}
+
+//	public static void culcWalletTotalAmount(TransactionModel tm, boolean isIncome) {
+//		String columnName;set
+//		if (isIncome) {
+//			columnName = "total_income";
+//		} else {
+//			columnName = "total_expense";
+//		}
+//
+//		String sql = "UPDATE wallet SET " + columnName + " = " + columnName + " + ? WHERE w_id = ?";
+//
+//		try {
+//			Connection connection = DbHelper.connection();
+//			PreparedStatement statement = connection.prepareStatement(sql);
+//			statement.setFloat(1, tm.getAmount());
+//			statement.setInt(2, tm.getWalletModel().getId());
+//			statement.executeUpdate();
+//
+//		} catch (SQLException e) {
+//			DbHelper.printSQLException(e);
+//		}
+//
+//	}
 }

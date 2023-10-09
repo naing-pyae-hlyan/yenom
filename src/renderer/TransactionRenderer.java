@@ -72,8 +72,18 @@ public class TransactionRenderer extends JPanel implements ListCellRenderer<Tran
 
 		lblDate.setText(dateFormat.format(value.getUpdatedDate()));
 		lblWalletName.setText(value.getWalletModel().getName());
-		lblCategoryName.setText("	" + value.getCategoryModel().getName());
-		lblAmount.setText(decimalFormat.format(value.getAmount()));
+		lblCategoryName.setText("	->	" + value.getCategoryModel().getName());
+
+		String amount = decimalFormat.format(value.getAmount());
+		if (value.getCategoryModel().isIncome()) {
+			amount = "+" + amount;
+		} else {
+			amount = "-" + amount;
+		}
+
+		lblAmount.setText(amount);
+		Color walletColor = new Color(value.getWalletModel().getColor());
+		Color categoryColor = new Color(value.getCategoryModel().getColor());
 
 		String desc = value.getDescription();
 		if (desc == null) {
@@ -106,9 +116,9 @@ public class TransactionRenderer extends JPanel implements ListCellRenderer<Tran
 			lblDate.setBackground(Color.white);
 			lblDate.setForeground(Color.black);
 			lblWalletName.setBackground(Color.white);
-			lblWalletName.setForeground(Color.black);
+			lblWalletName.setForeground(walletColor);
 			lblCategoryName.setBackground(Color.white);
-			lblCategoryName.setForeground(Color.black);
+			lblCategoryName.setForeground(categoryColor);
 			lblAmount.setBackground(Color.white);
 			lblAmount.setForeground(Color.black);
 			lblDescription.setBackground(Color.white);

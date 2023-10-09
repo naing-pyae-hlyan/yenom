@@ -15,10 +15,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import utils.*;
+import java.awt.GridLayout;
 
 public class PanelDashboard extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	private static JButton[] arrayBtn;
 
 	@Override
 	public void disposeUi(String arg) {
@@ -29,28 +32,26 @@ public class PanelDashboard extends BaseJPanel {
 	 * Create the panel.
 	 */
 	public PanelDashboard() {
-
+		setLayout(new GridLayout(1, 0, 0, 0));
+		createUi("");
 	}
 
 	@Override
 	public void createUi(String arg) {
 		super.createUi(arg);
 
-		JLabel lblDashboard = new JLabel("Dashboard");
-		lblDashboard.setHorizontalAlignment(SwingConstants.LEFT);
-		lblDashboard.setBounds(6, 0, 850, 42);
-		lblDashboard.setFont(new Font("JetBrains Mono", Font.PLAIN, 24));
-		add(lblDashboard);
+		GridLayout gridLayout = new GridLayout(5, 3, 10, 10);
+		setLayout(gridLayout);
+		// add buttons to the frame
+		add(new JButton("+"));
+		add(new JButton("="));
 
-		JButton btnNewButton = new JButton("Transaction");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		arrayBtn = new JButton[10];
+		// add JButtons dynamically
+		for (int i = 0; i < arrayBtn.length; i++) {
+			arrayBtn[i] = new JButton(Integer.toString(i));
+			add(arrayBtn[i]);
+		}
 
-			}
-		});
-		btnNewButton.setBounds(664, 489, 167, 61);
-		btnNewButton.setIcon(new ImageIcon(MyIcons.logo_add));
-		btnNewButton.setFont(new Font("JetBrains Mono", Font.PLAIN, 16));
-		add(btnNewButton);
 	}
 }
