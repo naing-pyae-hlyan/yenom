@@ -2,24 +2,18 @@ package renderer;
 
 import java.awt.BorderLayout;
 
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Insets;
-import java.text.DecimalFormat;
 import java.util.Date;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
-import javax.swing.border.EmptyBorder;
 import database.TransactionModel;
-import database.WalletModel;
 import utils.MyColors;
-import utils.MyIcons;
-import java.awt.FlowLayout;
 
 public class TransactionRenderer extends JPanel implements ListCellRenderer<TransactionModel> {
 
@@ -67,7 +61,7 @@ public class TransactionRenderer extends JPanel implements ListCellRenderer<Tran
 	public Component getListCellRendererComponent(JList<? extends TransactionModel> list, TransactionModel value,
 			int index, boolean isSelected, boolean cellHasFocus) {
 
-		lblDate.setText(dateFormat.format(value.getUpdatedDate()));
+		lblDate.setText(dateFormat.format(new Date(value.getUpdatedDate().getTime())));
 		lblWalletName.setText(value.getWalletModel().getName());
 		lblCategoryName.setText("	->	" + value.getCategoryModel().getName());
 

@@ -63,12 +63,9 @@ public class DataController {
 			while (result.next()) {
 				final int id = result.getInt("w_id");
 				final String name = result.getString("w_name");
-				final int color = result.getInt("w_color"); 
+				final int color = result.getInt("w_color");
 				final float tot_income = result.getInt("total_income");
 				final float tot_expense = result.getInt("total_expense");
-
-				System.out.println(name + "	I:" + tot_income + "	E:" + tot_expense);
-
 				wallets.add(new WalletModel(id, name, color, tot_income, tot_expense));
 			}
 		} catch (SQLException e) {
@@ -116,8 +113,8 @@ public class DataController {
 				final int id = result.getInt("t_id");
 				final float amount = result.getFloat("amount");
 				final String desc = result.getString("description");
-				final Date createdDate = result.getDate("created_date");
-				final Date updatedDate = result.getDate("updated_date");
+				final java.sql.Timestamp createdDate = result.getTimestamp("created_date");
+				final java.sql.Timestamp updatedDate = result.getTimestamp("updated_date");
 				final int categoryId = result.getInt("category_id");
 				final int walletId = result.getInt("wallet_id");
 

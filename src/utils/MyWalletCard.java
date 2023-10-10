@@ -21,7 +21,7 @@ public class MyWalletCard extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		final int width = (int) (size.width / 3.3);
-		final int height = (int) (width / 2.5);
+		final int height = (int) (width / 2);
 
 		setPreferredSize(new Dimension(width, height));
 		Border roundedBorder = new RoundBorder(16);

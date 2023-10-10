@@ -1,18 +1,18 @@
 package database;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 //https://stackoverflow.com/questions/2400955/how-to-store-java-date-to-mysql-datetime-with-jpa
 public class TransactionModel {
 	private int id;
 	private float amount;
 	private String description;
-	private Date updatedDate;
-	private Date createdDate;
+	private Timestamp updatedDate;
+	private Timestamp createdDate;
 	private WalletModel walletModel;
 	private CategoryModel categoryModel;
 
-	public TransactionModel(int id, float amount, String description, Date createdDate, Date updatedDate,
+	public TransactionModel(int id, float amount, String description, Timestamp createdDate, Timestamp updatedDate,
 			WalletModel walletModel, CategoryModel categoryModel) {
 		super();
 		this.setId(id);
@@ -48,22 +48,21 @@ public class TransactionModel {
 		this.description = description;
 	}
 
-	public Date getCreatedDate() {
+	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	public Date getUpdatedDate() {
+	public Timestamp getUpdatedDate() {
 		return updatedDate;
 	}
 
-	public void setUpdatedDate(Date datetime) {
+	public void setUpdatedDate(Timestamp datetime) {
 		this.updatedDate = datetime;
-	} 
-
+	}
 
 	public WalletModel getWalletModel() {
 		return walletModel;

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -199,7 +200,7 @@ public class PanelTransaction extends BaseJPanel {
 			public void actionPerformed(ActionEvent e) {
 				final float amount = parsingStringAmountToFloat(txtAmount.getText());
 				final String desc = txtDescription.getText();
-				final Date current = new Date(System.currentTimeMillis());
+				final java.sql.Timestamp current = new Timestamp(System.currentTimeMillis());
 				final WalletModel wm = (WalletModel) comboWallet.getSelectedItem();
 				final CategoryModel cm = (CategoryModel) comboCategory.getSelectedItem();
 				final TransactionModel trans = new TransactionModel(-1, amount, desc, current, current, wm, cm);
@@ -253,35 +254,18 @@ public class PanelTransaction extends BaseJPanel {
 
 		try {
 			Connection connection = DbHelper.connection();
-
-			// Insert the new transaction into the transaction table
-			String insertTransSQL = "INSERT INTO transaction "
+			String sql = "INSERT INTO transaction "
 					+ "(amount, description, category_id, wallet_id, created_date, updated_date) "
 					+ "VALUE (?, ?, ?, ?, ?, ?)";
 
-			PreparedStatement insertStatement = connection.prepareStatement(insertTransSQL);
+			PreparedStatement insertStatement = connection.prepareStatement(sql);
 			insertStatement.setFloat(1, tm.getAmount());
 			insertStatement.setString(2, tm.getDescription());
 			insertStatement.setInt(3, tm.getCategoryModel().getId());
 			insertStatement.setInt(4, tm.getWalletModel().getId());
-			insertStatement.setDate(5, tm.getCreatedDate());
-			insertStatement.setDate(6, tm.getUpdatedDate());
+			insertStatement.setTimestamp(5, tm.getCreatedDate());
+			insertStatement.setTimestamp(6, tm.getUpdatedDate());
 			insertStatement.executeUpdate();
-
-			// Calc and update the current total_income and total_expense values
-//			String columnName;
-//			if (isIncome) {
-//				columnName = "total_income";
-//			} else {
-//				columnName = "total_expense";
-//			}
-//
-//			String calcAndUpdateSQL = "UPDATE wallet SET " + columnName + " = " + columnName + " + ? WHERE w_id = ?";
-//			PreparedStatement calcAndUpdateStatement = connection.prepareStatement(calcAndUpdateSQL);
-//			calcAndUpdateStatement.setFloat(1, tm.getAmount());
-//			calcAndUpdateStatement.setInt(2, tm.getWalletModel().getId());
-//			calcAndUpdateStatement.executeUpdate();
-
 		} catch (SQLException ee) {
 			DbHelper.printSQLException(ee);
 		}
@@ -303,42 +287,15 @@ public class PanelTransaction extends BaseJPanel {
 
 		try {
 			Connection connection = DbHelper.connection();
-
-//			final String retrieveCurrentSelectedTransAmountSQL = "SELECT amount FROM transaction WHERE t_id = ?";
-//			PreparedStatement retrieveStatement = connection.prepareStatement(retrieveCurrentSelectedTransAmountSQL);
-//			retrieveStatement.setInt(1, tm.getId());
-//			ResultSet retrieveResult = retrieveStatement.executeQuery();
-//			float currentAmount = 0;
-//			if (retrieveResult.next()) {
-//				currentAmount = retrieveResult.getFloat("amount");
-//			}
-
-//			if (currentAmount != tm.getAmount()) {
-//			String columnName;
-//			if (tm.getCategoryModel().isIncome()) {
-//				columnName = "total_income";
-//			} else {
-//				columnName = "total_expense";
-//			}
-//			final String updateAmountSQL = "UPDATE wallet SET " + columnName + " = " + columnName + " - "
-//					+ currentAmount + " + ?" + " WHERE w_id = ?";
-//
-//			PreparedStatement updateAmountStatement = connection.prepareStatement(updateAmountSQL);
-//			updateAmountStatement.setFloat(1, tm.getAmount());
-//			updateAmountStatement.setInt(2, tm.getWalletModel().getId());
-//			updateAmountStatement.executeUpdate();
-//			System.out.println(
-//					tm.getWalletModel().getName() + "	" + columnName + "	" + tm.getAmount() + "	" + currentAmount);
-//			}
-
 			final String sql = "UPDATE transaction SET "
 					+ "amount = ?, description = ?, category_id = ?, wallet_id = ?, updated_date = ?  WHERE t_id = ?";
 			PreparedStatement statement = connection.prepareStatement(sql);
+
 			statement.setFloat(1, tm.getAmount());
 			statement.setString(2, tm.getDescription());
 			statement.setInt(3, tm.getCategoryModel().getId());
 			statement.setInt(4, tm.getWalletModel().getId());
-			statement.setDate(5, new Date(System.currentTimeMillis()));
+			statement.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 			statement.setInt(6, tm.getId());
 
 			statement.executeUpdate();
@@ -361,42 +318,10 @@ public class PanelTransaction extends BaseJPanel {
 
 		try {
 			Connection connection = DbHelper.connection();
-			// Delete the transaction form trans table
-			final String deleteTransSQL = "DELETE FROM transaction WHERE t_id = ?";
-			PreparedStatement deleteStatement = connection.prepareStatement(deleteTransSQL);
+			final String sql = "DELETE FROM transaction WHERE t_id = ?";
+			PreparedStatement deleteStatement = connection.prepareStatement(sql);
 			deleteStatement.setInt(1, tm.getId());
 			deleteStatement.executeUpdate();
-
-			// Retrieve the all total amount after delete
-//			String columnName;
-//			if (tm.getCategoryModel().isIncome()) {
-//				columnName = "total_income";
-//			} else {
-//				columnName = "total_expense";
-//			}
-//			final String retrieveAmountSQL = "SELECT " + columnName + " FROM wallet WHERE w_id = ?";
-//			PreparedStatement retrieveStatement = connection.prepareStatement(retrieveAmountSQL);
-//			retrieveStatement.setInt(1, tm.getWalletModel().getId());
-//			ResultSet retrieveResult = retrieveStatement.executeQuery();
-//			float currentAmount = 0;
-//			if (retrieveResult.next()) {
-//				currentAmount = retrieveResult.getFloat(columnName);
-//			}
-//
-//			if (currentAmount > 0) {
-//				final String calcAndDeleteSQL = "UPDATE wallet SET " + columnName + " = " + columnName
-//						+ " - ? WHERE w_id = ?";
-//				PreparedStatement calcAndDeleteStatement = connection.prepareStatement(calcAndDeleteSQL);
-//				calcAndDeleteStatement.setFloat(1, tm.getAmount());
-//				calcAndDeleteStatement.setInt(2, tm.getWalletModel().getId());
-//				calcAndDeleteStatement.executeUpdate();
-//			} else if (currentAmount < 0) {
-//				final String setDefaultZeroSQL = "UPDATE wallet SET " + columnName + " = ? WHERE w_id = ?";
-//				PreparedStatement setDefaultZeroStatement = connection.prepareStatement(setDefaultZeroSQL);
-//				setDefaultZeroStatement.setFloat(1, 0);
-//				setDefaultZeroStatement.setInt(2, tm.getWalletModel().getId());
-//				setDefaultZeroStatement.executeUpdate();
-//			}
 
 		} catch (SQLException ee) {
 			DbHelper.printSQLException(ee);
