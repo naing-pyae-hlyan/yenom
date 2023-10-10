@@ -15,5 +15,10 @@ public class MyColors {
 		return new Color(238, 238, 238);
 	}
 
-
+	public static String colorToRGBString(Color color) {
+		int red = color.getRed();
+		int green = color.getGreen();
+		int blue = color.getBlue();
+		return "RGB(" + red + "," + green + "," + blue + ")";
+	}
 }

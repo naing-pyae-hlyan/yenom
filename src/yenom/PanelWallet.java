@@ -1,8 +1,12 @@
 package yenom;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -12,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,7 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTextField;
@@ -32,10 +38,17 @@ import renderer.*;
 public class PanelWallet extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	private JPanel lPanel;
+	private JPanel rPanel;
+
 	private JList<WalletModel> listViewWallet;
-	private JPanel selectedColorPanel;
+
 	private JTextField txtWalletName;
 	private JScrollPane scrollPane;
+
+	private CircularPanel circularSelectedColorPanel;
+	private JLabel lblSelectedColor;
 
 	private Color selectedColor = Color.white;
 	private WalletModel selectedWM = null;
@@ -54,63 +67,104 @@ public class PanelWallet extends BaseJPanel {
 		super.createUi(size);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
+		final int halfOfWidth = (int) (size.width / 2);
+		final Dimension dimension = new Dimension(halfOfWidth, size.height);
+
+		lPanel = new JPanel();
+		lPanel.setLayout(new BorderLayout(0, 0));
+		lPanel.setPreferredSize(dimension);
+
+		rPanel = new JPanel();
+		rPanel.setLayout(new BoxLayout(rPanel, BoxLayout.Y_AXIS));
+		rPanel.setPreferredSize(dimension);
+
 		listViewWallet = new JList<>();
 		listViewWallet.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		// set WalletRender for custom widget
 		listViewWallet.setCellRenderer(new WalletRenderer());
 		listViewWallet.setListData(DataController.wallets());
 
-		scrollPane = new JScrollPane(listViewWallet); // load wallet list
-		scrollPane.setBounds(6, 6, 430, 560);
-		add(scrollPane);
+		scrollPane = new JScrollPane(listViewWallet);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setPreferredSize(dimension);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		lPanel.add(scrollPane);
 
+		// -------------------------------------------------------------
+
+		// Right Part
 		JLabel lblTitle = new JLabel("Manage Wallet");
-		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setFont(new Font("Default", Font.PLAIN, 24));
-		lblTitle.setBounds(531, 6, 237, 33);
-		add(lblTitle);
+		lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+		rPanel.add(lblTitle);
+		rPanel.add(Box.createVerticalStrut(16));
 
-		JLabel lblTextField = new JLabel("Wallet Name *");
-		lblTextField.setFont(new Font("Default", Font.PLAIN, 13));
-		lblTextField.setBounds(505, 148, 114, 16);
-		add(lblTextField);
+		//
+		JPanel namePanel = new JPanel();
+		namePanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Enter Wallet Name *"));
+		namePanel.setLayout(new GridLayout(1, 1));
+		namePanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
-		txtWalletName = new JTextField("");
+		// Wallet Name Input
+		txtWalletName = new JTextField(20);
 		txtWalletName.setFont(new Font("Default", Font.PLAIN, 13));
-		txtWalletName.setHorizontalAlignment(SwingConstants.LEFT);
-		txtWalletName.setBounds(503, 176, 292, 64);
-		txtWalletName.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
-		add(txtWalletName);
+		txtWalletName.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+		namePanel.add(txtWalletName, BorderLayout.CENTER);
+		rPanel.add(namePanel);
+		rPanel.add(Box.createVerticalStrut(16));
 
-		JLabel lblTextfield2 = new JLabel("Wallet Color");
-		lblTextfield2.setFont(new Font("Default", Font.PLAIN, 13));
-		lblTextfield2.setBounds(505, 264, 114, 16);
-		add(lblTextfield2);
+		// -------------------------------------------------------------
 
-		selectedColorPanel = new JPanel();
-		selectedColorPanel.setBounds(505, 292, 178, 60);
-		selectedColorPanel.setBackground(Color.white);
-		add(selectedColorPanel);
+		//
+		JPanel colorPanel = new JPanel();
+		colorPanel.setBorder(new TitledBorder("Select Wallet Color"));
+		colorPanel.setLayout(new GridLayout(1, 0));
+		colorPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
-		JButton btnColorButton = new JButton("");
-		btnColorButton.setBounds(733, 292, 64, 64);
-		btnColorButton.setIcon(new ImageIcon(MyIcons.logo_color_48));
-		add(btnColorButton);
+		// Color picker and preview
+		JButton btnColorChooserButton = new JButton();
+		btnColorChooserButton.setIcon(new ImageIcon(MyIcons.logo_color_48));
+		colorPanel.add(btnColorChooserButton);
 
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(505, 414, 64, 64);
-		btnNewButton.setIcon(new ImageIcon(MyIcons.logo_add_48));
-		add(btnNewButton);
+		JPanel selectedColorPanel = new JPanel(new BorderLayout());
+		selectedColorPanel.setBorder(new EmptyBorder(10, 10, 10, 0));
 
-		JButton btnUpdateButton = new JButton("");
-		btnUpdateButton.setBounds(619, 414, 64, 64);
-		btnUpdateButton.setIcon(new ImageIcon(MyIcons.logo_update_48));
-		add(btnUpdateButton);
+		lblSelectedColor = new JLabel(MyColors.colorToRGBString(selectedColor));
+		lblSelectedColor.setFont(new Font("Default", Font.PLAIN, 13));
 
-		JButton btnDeleteButton = new JButton("");
-		btnDeleteButton.setBounds(733, 414, 64, 64);
-		btnDeleteButton.setIcon(new ImageIcon(MyIcons.logo_delete_48));
-		add(btnDeleteButton);
+		circularSelectedColorPanel = new CircularPanel();
+		selectedColorPanel.add(lblSelectedColor, BorderLayout.WEST);
+		selectedColorPanel.add(circularSelectedColorPanel, BorderLayout.CENTER);
+		colorPanel.add(selectedColorPanel);
+
+		rPanel.add(colorPanel);
+		rPanel.add(Box.createVerticalStrut(16));
+
+		// -------------------------------------------------------------
+
+		//
+		JPanel btnsPanel = new JPanel();
+		btnsPanel.setBorder(new EmptyBorder(5, 0, 5, 5));
+		btnsPanel.setLayout(new GridLayout(1, 3));
+		btnsPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
+
+		JButton btnNewButton = new JButton("Add");
+		btnsPanel.add(btnNewButton);
+
+		JButton btnUpdateButton = new JButton("Update");
+		btnsPanel.add(btnUpdateButton);
+
+		JButton btnDeleteButton = new JButton("Delete");
+		;
+		btnsPanel.add(btnDeleteButton);
+
+		rPanel.add(btnsPanel);
+		rPanel.add(Box.createVerticalGlue());
+
+		add(lPanel);
+		add(rPanel);
+
+		// -------------------------------------------------------------
 
 		listViewWallet.addMouseListener(new MouseAdapter() {
 			@Override
@@ -129,17 +183,19 @@ public class PanelWallet extends BaseJPanel {
 				if (selectedWM != null) {
 					txtWalletName.setText(selectedWM.getName());
 					selectedColor = new Color(selectedWM.getColor());
-					selectedColorPanel.setBackground(selectedColor);
+					lblSelectedColor.setText(MyColors.colorToRGBString(selectedColor));
+					circularSelectedColorPanel.setBackgroundColor(selectedColor);
 				}
 			}
 		});
 
-		btnColorButton.addActionListener(new ActionListener() {
+		btnColorChooserButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Color color = JColorChooser.showDialog(btnColorButton, "Choose", getBackground());
+				Color color = JColorChooser.showDialog(btnColorChooserButton, "Choose", getBackground());
 				if (color != null) {
 					selectedColor = color;
-					selectedColorPanel.setBackground(color);
+					lblSelectedColor.setText(MyColors.colorToRGBString(color));
+					circularSelectedColorPanel.setBackgroundColor(color);
 				}
 			}
 		});
@@ -217,7 +273,8 @@ public class PanelWallet extends BaseJPanel {
 		txtWalletName.setText("");
 		// Clear wallet color panel
 		selectedColor = Color.white;
-		selectedColorPanel.setBackground(Color.white);
+		lblSelectedColor.setText(MyColors.colorToRGBString(Color.white));
+		circularSelectedColorPanel.setBackgroundColor(Color.white);
 	}
 
 	private void updateWallet(WalletModel wm, String name, int color) {
@@ -243,7 +300,8 @@ public class PanelWallet extends BaseJPanel {
 		txtWalletName.setText("");
 		// Clear wallet color panel
 		selectedColor = Color.white;
-		selectedColorPanel.setBackground(Color.white);
+		lblSelectedColor.setText(MyColors.colorToRGBString(Color.white));
+		circularSelectedColorPanel.setBackgroundColor(Color.white);
 
 	}
 
@@ -269,7 +327,8 @@ public class PanelWallet extends BaseJPanel {
 		txtWalletName.setText("");
 		// Clear wallet color panel
 		selectedColor = Color.white;
-		selectedColorPanel.setBackground(Color.white);
+		lblSelectedColor.setText(MyColors.colorToRGBString(Color.white));
+		circularSelectedColorPanel.setBackgroundColor(Color.white);
 	}
 
 }

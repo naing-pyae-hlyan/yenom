@@ -58,35 +58,35 @@ public class PanelTransaction extends BaseJPanel {
 
 	@Override
 	public void disposeUi() {
-		super.disposeUi();
+		super.disposeUi(); 
 	}
 
 	@Override
 	public void createUi(Dimension size) {
 		super.createUi(size);
-		System.out.println(size.width + "  " + size.height);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		final int halfOfWidth = (int) (size.width / 2);
 		final Dimension dimension = new Dimension(halfOfWidth, size.height);
 
 		lPanel = new JPanel();
-		lPanel.setSize(dimension);
+		lPanel.setLayout(new BorderLayout(0, 0));
 		lPanel.setPreferredSize(dimension);
+
 		rPanel = new JPanel();
-		rPanel.setSize(dimension);
-		rPanel.setPreferredSize(dimension);
 		rPanel.setLayout(new BoxLayout(rPanel, BoxLayout.Y_AXIS));
+		rPanel.setPreferredSize(dimension);
 
 		listViewTrans = new JList<>();
 		listViewTrans.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		// set TransRender for custom ui.
 		listViewTrans.setCellRenderer(new TransactionRenderer());
 		listViewTrans.setListData(DataController.transactions());
 
-		scrollPane = new JScrollPane(listViewTrans); // load wallet list
-		scrollPane.setSize(dimension);
+		scrollPane = new JScrollPane(listViewTrans);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setPreferredSize(dimension);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		lPanel.add(scrollPane);
 
 		// Right Part
@@ -168,14 +168,14 @@ public class PanelTransaction extends BaseJPanel {
 
 		JButton btnUpdateButton = new JButton("Update");
 		btnsPanel.add(btnUpdateButton);
-
+	
 		JButton btnDeleteButton = new JButton("Delete");
 		btnsPanel.add(btnDeleteButton);
-		rPanel.add(btnsPanel);
 
+		rPanel.add(btnsPanel);
 		rPanel.add(Box.createVerticalGlue());
 
-		add(lPanel);
+		add(lPanel);  
 		add(rPanel);
 		// -------------------------------------------------------------
 

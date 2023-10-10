@@ -1,5 +1,6 @@
 package utils;
 
+import javax.swing.JPanel;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
