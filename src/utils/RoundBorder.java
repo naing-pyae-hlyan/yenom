@@ -1,11 +1,9 @@
 package utils;
 
-import javax.swing.JPanel;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
-// Custom Border class for creating rounded borders
 public class RoundBorder extends AbstractBorder {
 	private static final long serialVersionUID = 1L;
 	private int radius;

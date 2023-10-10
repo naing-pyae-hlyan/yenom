@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -39,9 +38,6 @@ public class PanelWallet extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JPanel lPanel;
-	private JPanel rPanel;
-
 	private JList<WalletModel> listViewWallet;
 
 	private JTextField txtWalletName;
@@ -70,11 +66,10 @@ public class PanelWallet extends BaseJPanel {
 		final int halfOfWidth = (int) (size.width / 2);
 		final Dimension dimension = new Dimension(halfOfWidth, size.height);
 
-		lPanel = new JPanel();
-		lPanel.setLayout(new BorderLayout(0, 0));
+		JPanel lPanel = new JPanel(new BorderLayout(0, 0));
 		lPanel.setPreferredSize(dimension);
 
-		rPanel = new JPanel();
+		JPanel rPanel = new JPanel();
 		rPanel.setLayout(new BoxLayout(rPanel, BoxLayout.Y_AXIS));
 		rPanel.setPreferredSize(dimension);
 
@@ -100,9 +95,8 @@ public class PanelWallet extends BaseJPanel {
 		rPanel.add(Box.createVerticalStrut(16));
 
 		//
-		JPanel namePanel = new JPanel();
-		namePanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Enter Wallet Name *"));
-		namePanel.setLayout(new GridLayout(1, 1));
+		JPanel namePanel = new JPanel(new GridLayout(1, 0));
+		namePanel.setBorder(new TitledBorder("Enter Wallet Name *"));
 		namePanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
 		// Wallet Name Input
@@ -138,14 +132,12 @@ public class PanelWallet extends BaseJPanel {
 		colorPanel.add(selectedColorPanel);
 
 		rPanel.add(colorPanel);
-		rPanel.add(Box.createVerticalStrut(16));
+		rPanel.add(Box.createVerticalStrut(88));
 
 		// -------------------------------------------------------------
 
 		//
-		JPanel btnsPanel = new JPanel();
-		btnsPanel.setBorder(new EmptyBorder(5, 0, 5, 5));
-		btnsPanel.setLayout(new GridLayout(1, 3));
+		JPanel btnsPanel = new JPanel(new GridLayout(1, 3));
 		btnsPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
 		JButton btnNewButton = new JButton("Add");
@@ -155,7 +147,6 @@ public class PanelWallet extends BaseJPanel {
 		btnsPanel.add(btnUpdateButton);
 
 		JButton btnDeleteButton = new JButton("Delete");
-		;
 		btnsPanel.add(btnDeleteButton);
 
 		rPanel.add(btnsPanel);

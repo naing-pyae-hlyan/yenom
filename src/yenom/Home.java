@@ -49,7 +49,7 @@ public class Home extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+		EventQueue.invokeLater(new Runnable() { 
 			public void run() {
 				try {
 					Home frame = new Home();
@@ -77,14 +77,10 @@ public class Home extends JFrame {
 
 		setBackground(new Color(255, 255, 255));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setBounds(100, 100, 1075, 600);
-
+		
 		JPanel panelLeft = new JPanel();
-//		panelLeft.setPreferredSize(new Dimension(drawerWidth, 0));
 		panelLeft.setBackground(MyColors.primaryColor());
 		panelLeft.setLayout(null);
-		System.out.println("app-width: " + appWidth + ", app-height: " + appHeight + ", drawer-width: " + drawerWidth
-				+ ", right-panel-width: " + rightPanelWidth);
 
 		JPanel panelRight = new JPanel();
 		panelRight.setLayout(null);

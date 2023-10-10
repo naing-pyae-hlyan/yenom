@@ -1,8 +1,11 @@
 package yenom;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -12,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -21,7 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTextField;
@@ -34,15 +39,21 @@ import renderer.*;
 public class PanelCategory extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
+
 	private JList<CategoryModel> listViewCategory;
-	private JPanel selectedColorPanel;
+
 	private JTextField txtCategoryName;
 	private JScrollPane scrollPane;
+
+	private CircularPanel circularSelectedColorPanel;
+	private JLabel lblSelectedColor;
+
 	private JRadioButton radioBtnExpense;
 	private JRadioButton radioBtnIncome;
 
 	private Color selectedColor = Color.white;
 	private CategoryModel selectedCM = null;
+
 	private EIEnum eiEnum = EIEnum.expense;
 
 	/**
@@ -62,79 +73,120 @@ public class PanelCategory extends BaseJPanel {
 		super.createUi(size);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
+		final int halfOfWidth = (int) (size.width / 2);
+		final Dimension dimension = new Dimension(halfOfWidth, size.height);
+
+		JPanel lPanel = new JPanel(new BorderLayout(0, 0));
+		lPanel.setPreferredSize(dimension);
+
+		JPanel rPanel = new JPanel();
+		rPanel.setLayout(new BoxLayout(rPanel, BoxLayout.Y_AXIS));
+		rPanel.setPreferredSize(dimension);
+
 		listViewCategory = new JList<>();
 		listViewCategory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		// set WalletRender for custom widget
 		listViewCategory.setCellRenderer(new CategoryRenderer());
 		listViewCategory.setListData(DataController.categories());
 
-		scrollPane = new JScrollPane(listViewCategory); // load wallet list
-		scrollPane.setBounds(6, 6, 430, 560);
-		add(scrollPane);
+		scrollPane = new JScrollPane(listViewCategory);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setPreferredSize(dimension);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		lPanel.add(scrollPane);
 
-		JLabel lblNewLabel = new JLabel("Manage Category");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Default", Font.PLAIN, 24));
-		lblNewLabel.setBounds(531, 6, 237, 33);
-		add(lblNewLabel);
+		// -------------------------------------------------------------
 
-		JLabel lblTextField = new JLabel("Category Name *");
-		lblTextField.setFont(new Font("Default", Font.PLAIN, 13));
-		lblTextField.setBounds(503, 79, 159, 16);
-		add(lblTextField);
+		// Right Part
+		JLabel lblTitle = new JLabel("Manage Category");
+		lblTitle.setFont(new Font("Default", Font.PLAIN, 24));
+		lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+		rPanel.add(lblTitle);
+		rPanel.add(Box.createVerticalStrut(16));
 
-		txtCategoryName = new JTextField("");
+		//
+		JPanel namePanel = new JPanel(new GridLayout(1, 0));
+		namePanel.setBorder(new TitledBorder("Enter Category Name *"));
+		namePanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
+
+		// Wallet Name Input
+		txtCategoryName = new JTextField(20);
 		txtCategoryName.setFont(new Font("Default", Font.PLAIN, 13));
-		txtCategoryName.setHorizontalAlignment(SwingConstants.LEFT);
-		txtCategoryName.setBounds(503, 107, 292, 64);
-		txtCategoryName.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
-		add(txtCategoryName);
+		txtCategoryName.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+		namePanel.add(txtCategoryName, BorderLayout.CENTER);
+		rPanel.add(namePanel);
+		rPanel.add(Box.createVerticalStrut(16));
 
-		JLabel lblTextfield2 = new JLabel("Category Color");
-		lblTextfield2.setFont(new Font("Default", Font.PLAIN, 13));
-		lblTextfield2.setBounds(503, 183, 114, 16);
-		add(lblTextfield2);
+		// -------------------------------------------------------------
 
-		selectedColorPanel = new JPanel();
-		selectedColorPanel.setBounds(503, 211, 178, 60);
-		selectedColorPanel.setBackground(Color.white);
-		add(selectedColorPanel);
+		//
+		JPanel colorPanel = new JPanel(new GridLayout(1, 0));
+		colorPanel.setBorder(new TitledBorder("Select Category Color"));
+		colorPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
-		JButton btnColorButton = new JButton("");
-		btnColorButton.setBounds(731, 207, 64, 64);
-		btnColorButton.setIcon(new ImageIcon(MyIcons.logo_color_48));
-		add(btnColorButton);
+		// Color picker and preview
+		JButton btnColorChooserButton = new JButton();
+		btnColorChooserButton.setIcon(new ImageIcon(MyIcons.logo_color_48));
+		colorPanel.add(btnColorChooserButton);
 
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(505, 414, 64, 64);
-		btnNewButton.setIcon(new ImageIcon(MyIcons.logo_add_48));
-		add(btnNewButton);
+		JPanel selectedColorPanel = new JPanel(new BorderLayout());
+		selectedColorPanel.setBorder(new EmptyBorder(10, 10, 10, 0));
 
-		JButton btnUpdateButton = new JButton("");
-		btnUpdateButton.setBounds(619, 414, 64, 64);
-		btnUpdateButton.setIcon(new ImageIcon(MyIcons.logo_update_48));
-		add(btnUpdateButton);
+		lblSelectedColor = new JLabel(MyColors.colorToRGBString(selectedColor));
+		lblSelectedColor.setFont(new Font("Default", Font.PLAIN, 13));
 
-		JButton btnDeleteButton = new JButton("");
-		btnDeleteButton.setBounds(733, 414, 64, 64);
-		btnDeleteButton.setIcon(new ImageIcon(MyIcons.logo_delete_48));
-		add(btnDeleteButton);
+		circularSelectedColorPanel = new CircularPanel();
+		selectedColorPanel.add(lblSelectedColor, BorderLayout.WEST);
+		selectedColorPanel.add(circularSelectedColorPanel, BorderLayout.CENTER);
+		colorPanel.add(selectedColorPanel);
+
+		rPanel.add(colorPanel);
+		rPanel.add(Box.createVerticalStrut(16));
+
+		// -------------------------------------------------------------
+
+		//
+		JPanel radiosPanel = new JPanel(new BorderLayout());
+		radiosPanel.setBorder(new EmptyBorder(5, 0, 5, 5));
+		radiosPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
 		radioBtnExpense = new JRadioButton("Expense");
-		radioBtnExpense.setBounds(502, 315, 141, 23);
 		radioBtnExpense.setActionCommand("expense");
 		radioBtnExpense.setSelected(true);
-		add(radioBtnExpense);
+		radiosPanel.add(radioBtnExpense, BorderLayout.NORTH);
 
 		radioBtnIncome = new JRadioButton("Income");
-		radioBtnIncome.setBounds(654, 315, 141, 23);
 		radioBtnIncome.setActionCommand("income");
 		radioBtnIncome.setSelected(false);
-		add(radioBtnIncome);
+		radiosPanel.add(radioBtnIncome, BorderLayout.SOUTH);
 
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(radioBtnExpense);
 		bg.add(radioBtnIncome);
+
+		rPanel.add(radiosPanel);
+		rPanel.add(Box.createVerticalStrut(16));
+		// -------------------------------------------------------------
+		//
+		JPanel btnsPanel = new JPanel(new GridLayout(1, 3));
+		btnsPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
+
+		JButton btnNewButton = new JButton("Add");
+		btnsPanel.add(btnNewButton);
+
+		JButton btnUpdateButton = new JButton("Update");
+		btnsPanel.add(btnUpdateButton);
+
+		JButton btnDeleteButton = new JButton("Delete");
+		btnsPanel.add(btnDeleteButton);
+
+		rPanel.add(btnsPanel);
+		rPanel.add(Box.createVerticalGlue());
+
+		add(lPanel);
+		add(rPanel);
+
+		// -------------------------------------------------------------
 
 		listViewCategory.addMouseListener(new MouseAdapter() {
 			@Override
@@ -153,7 +205,9 @@ public class PanelCategory extends BaseJPanel {
 				if (selectedCM != null) {
 					txtCategoryName.setText(selectedCM.getName());
 					selectedColor = new Color(selectedCM.getColor());
-					selectedColorPanel.setBackground(selectedColor);
+					lblSelectedColor.setText(MyColors.colorToRGBString(selectedColor));
+					circularSelectedColorPanel.setBackgroundColor(selectedColor);
+
 					final boolean isIncome = selectedCM.isIncome();
 					eiEnum = isIncome ? EIEnum.income : EIEnum.expense;
 					radioBtnIncome.setSelected(isIncome);
@@ -162,13 +216,14 @@ public class PanelCategory extends BaseJPanel {
 			}
 		});
 
-		btnColorButton.addActionListener(new ActionListener() {
+		btnColorChooserButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Color color = JColorChooser.showDialog(btnColorButton, "Choose", getBackground());
+				Color color = JColorChooser.showDialog(btnColorChooserButton, "Choose", getBackground());
 				if (color != null) {
 					selectedColor = color;
-					selectedColorPanel.setBackground(color);
+					lblSelectedColor.setText(MyColors.colorToRGBString(color));
+					circularSelectedColorPanel.setBackgroundColor(color);
 				}
 			}
 		});
@@ -261,7 +316,8 @@ public class PanelCategory extends BaseJPanel {
 		// Clear category name text field
 		txtCategoryName.setText("");
 		selectedColor = Color.white;
-		selectedColorPanel.setBackground(Color.white);
+		lblSelectedColor.setText(MyColors.colorToRGBString(Color.white));
+		circularSelectedColorPanel.setBackgroundColor(Color.white);
 	}
 
 	private void updateCategory(CategoryModel wm, String name, int color, boolean isIncome) {
@@ -288,7 +344,8 @@ public class PanelCategory extends BaseJPanel {
 		txtCategoryName.setText("");
 		// Clear wallet color panel
 		selectedColor = Color.white;
-		selectedColorPanel.setBackground(Color.white);
+		lblSelectedColor.setText(MyColors.colorToRGBString(Color.white));
+		circularSelectedColorPanel.setBackgroundColor(Color.white);
 
 	}
 
@@ -314,7 +371,8 @@ public class PanelCategory extends BaseJPanel {
 		txtCategoryName.setText("");
 		// Clear wallet color panel
 		selectedColor = Color.white;
-		selectedColorPanel.setBackground(Color.white);
+		lblSelectedColor.setText(MyColors.colorToRGBString(Color.white));
+		circularSelectedColorPanel.setBackgroundColor(Color.white);
 	}
 
 	enum EIEnum {

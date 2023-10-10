@@ -37,9 +37,6 @@ public class PanelTransaction extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JPanel lPanel;
-	private JPanel rPanel;
-
 	private JList<TransactionModel> listViewTrans;
 	private JTextField txtAmount;
 	private JTextField txtDescription;
@@ -58,7 +55,7 @@ public class PanelTransaction extends BaseJPanel {
 
 	@Override
 	public void disposeUi() {
-		super.disposeUi(); 
+		super.disposeUi();
 	}
 
 	@Override
@@ -69,11 +66,11 @@ public class PanelTransaction extends BaseJPanel {
 		final int halfOfWidth = (int) (size.width / 2);
 		final Dimension dimension = new Dimension(halfOfWidth, size.height);
 
-		lPanel = new JPanel();
+		JPanel lPanel = new JPanel(new BorderLayout(0, 0));
 		lPanel.setLayout(new BorderLayout(0, 0));
 		lPanel.setPreferredSize(dimension);
 
-		rPanel = new JPanel();
+		JPanel rPanel = new JPanel();
 		rPanel.setLayout(new BoxLayout(rPanel, BoxLayout.Y_AXIS));
 		rPanel.setPreferredSize(dimension);
 
@@ -97,9 +94,8 @@ public class PanelTransaction extends BaseJPanel {
 		rPanel.add(Box.createVerticalStrut(16));
 
 		//
-		JPanel walletPanel = new JPanel();
+		JPanel walletPanel = new JPanel(new GridLayout(1, 1));
 		walletPanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Select Wallet"));
-		walletPanel.setLayout(new GridLayout(1, 1));
 		walletPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
 		// Wallet Dropdown
@@ -112,9 +108,8 @@ public class PanelTransaction extends BaseJPanel {
 		// -------------------------------------------------------------
 
 		//
-		JPanel categoryPanel = new JPanel();
+		JPanel categoryPanel = new JPanel(new GridLayout(1, 1));
 		categoryPanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Select Category"));
-		categoryPanel.setLayout(new GridLayout(1, 1));
 		categoryPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
 		// Category Dropdown
@@ -127,9 +122,8 @@ public class PanelTransaction extends BaseJPanel {
 		// -------------------------------------------------------------
 
 		//
-		JPanel amountPanel = new JPanel();
-		amountPanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Enter Amount *"));
-		amountPanel.setLayout(new GridLayout(1, 1));
+		JPanel amountPanel = new JPanel(new GridLayout(1, 1));
+		amountPanel.setBorder(new TitledBorder("Enter Amount *"));
 		amountPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
 		// Amount Input
@@ -143,9 +137,8 @@ public class PanelTransaction extends BaseJPanel {
 		// -------------------------------------------------------------
 
 		//
-		JPanel descPanel = new JPanel();
-		descPanel.setBorder(new TitledBorder(new EmptyBorder(5, 0, 5, 5), "Enter Description"));
-		descPanel.setLayout(new GridLayout(1, 1));
+		JPanel descPanel = new JPanel(new GridLayout(1, 1));
+		descPanel.setBorder(new TitledBorder("Enter Description"));
 		descPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
 		txtDescription = new JTextField(20);
@@ -158,9 +151,8 @@ public class PanelTransaction extends BaseJPanel {
 		// -------------------------------------------------------------
 
 		//
-		JPanel btnsPanel = new JPanel();
+		JPanel btnsPanel = new JPanel(new GridLayout(1, 3));
 		btnsPanel.setBorder(new EmptyBorder(5, 0, 5, 5));
-		btnsPanel.setLayout(new GridLayout(1, 3));
 		btnsPanel.setMaximumSize(new Dimension(halfOfWidth - 24, 60));
 
 		JButton btnNewButton = new JButton("Add");
@@ -168,14 +160,14 @@ public class PanelTransaction extends BaseJPanel {
 
 		JButton btnUpdateButton = new JButton("Update");
 		btnsPanel.add(btnUpdateButton);
-	
+
 		JButton btnDeleteButton = new JButton("Delete");
 		btnsPanel.add(btnDeleteButton);
 
 		rPanel.add(btnsPanel);
 		rPanel.add(Box.createVerticalGlue());
 
-		add(lPanel);  
+		add(lPanel);
 		add(rPanel);
 		// -------------------------------------------------------------
 

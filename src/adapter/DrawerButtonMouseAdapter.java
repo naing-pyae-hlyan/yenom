@@ -4,8 +4,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
-import utils.MyColors;
-
 public class DrawerButtonMouseAdapter extends MouseAdapter {
 	JPanel panel;
 

@@ -1,8 +1,6 @@
 package utils;
 
 import java.awt.Dimension;
-
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 public abstract class BaseJPanel extends JPanel {
@@ -12,7 +10,6 @@ public abstract class BaseJPanel extends JPanel {
 		repaint();
 		setVisible(true);
 		setBounds(8, 4, size.width, size.height);
-//		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 	}
 
 	public void disposeUi() {
