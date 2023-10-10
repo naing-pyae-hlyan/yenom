@@ -32,7 +32,6 @@ public class PanelDashboard extends BaseJPanel {
 
 	private static final long serialVersionUID = 1L;
 
-
 	@Override
 	public void disposeUi() {
 		super.disposeUi();
@@ -54,8 +53,7 @@ public class PanelDashboard extends BaseJPanel {
 		JPanel gridPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		gridPanel.setPreferredSize(dimension);
 
-		// TODO calc sql
-		final List<WalletModel> wallets = DataController.getWallets();
+		final List<WalletModel> wallets = DataController.getWalletsByFilteredAmount();
 
 		for (int i = 0, l = wallets.size(); i < l; i++) {
 			final WalletModel wm = wallets.get(i);

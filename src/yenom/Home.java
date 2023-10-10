@@ -42,14 +42,12 @@ public class Home extends JFrame {
 	private static int appWidth = 0;
 	private static int appHeight = 0;
 	private int rightPanelWidth = 0;
-//	private PanelTrash trash;
-//	private PanelSetting setting;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() { 
+		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Home frame = new Home();
@@ -57,7 +55,7 @@ public class Home extends JFrame {
 					// Get the screen size of computer
 
 					frame.setSize(new Dimension(appWidth, appHeight));
-//					frame.setResizable(false);
+					frame.setResizable(false);
 					frame.setVisible(true);
 
 					DbHelper.connect();
@@ -77,7 +75,7 @@ public class Home extends JFrame {
 
 		setBackground(new Color(255, 255, 255));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		JPanel panelLeft = new JPanel();
 		panelLeft.setBackground(MyColors.primaryColor());
 		panelLeft.setLayout(null);
@@ -199,6 +197,9 @@ public class Home extends JFrame {
 		leftWallets.add(lblWalletsLogo);
 
 		selectedLeftPanelName = leftDashboard.getName();
+
+		// Start create dashboard UI
+		panelDashboard.createUi(new Dimension(rightPanelWidth, appHeight - 42));
 
 		leftDashboard.addMouseListener(new DrawerButtonMouseAdapter(leftDashboard) {
 			@Override

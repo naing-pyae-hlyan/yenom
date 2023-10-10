@@ -39,6 +39,34 @@ public class DataController {
 				final float tot_income = result.getInt("total_income");
 				final float tot_expense = result.getInt("total_expense");
 
+				wallets.add(new WalletModel(id, name, color, tot_income, tot_expense));
+			}
+		} catch (SQLException e) {
+			DbHelper.printSQLException(e);
+		}
+		return wallets;
+	}
+
+	public static List<WalletModel> getWalletsByFilteredAmount() {
+		List<WalletModel> wallets = new ArrayList<>();
+
+		String sql = "SELECT " + "W.w_id AS \"w_id\"," + "W.w_name AS \"w_name\", " + "W.w_color AS \"w_color\","
+				+ "COALESCE(SUM(CASE WHEN C.is_income = true THEN T.amount ELSE 0 END), 0) AS \"total_income\", " + ""
+				+ "COALESCE(SUM(CASE WHEN c.is_income = false THEN t.amount ELSE 0 END), 0) AS \"total_expense\" " + ""
+				+ "FROM wallet W " + "LEFT JOIN transaction T ON W.w_id = T.wallet_id "
+				+ "LEFT JOIN category C ON T.category_id = c.c_id " + "" + "GROUP BY W.w_name, W.w_id";
+
+		try {
+			Connection connection = DbHelper.connection();
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while (result.next()) {
+				final int id = result.getInt("w_id");
+				final String name = result.getString("w_name");
+				final int color = result.getInt("w_color"); 
+				final float tot_income = result.getInt("total_income");
+				final float tot_expense = result.getInt("total_expense");
+
 				System.out.println(name + "	I:" + tot_income + "	E:" + tot_expense);
 
 				wallets.add(new WalletModel(id, name, color, tot_income, tot_expense));
@@ -46,7 +74,7 @@ public class DataController {
 		} catch (SQLException e) {
 			DbHelper.printSQLException(e);
 		}
-		System.out.println("---------------------------------------");
+
 		return wallets;
 	}
 
@@ -80,7 +108,7 @@ public class DataController {
 		String sql = "SELECT * FROM transaction T " + "LEFT JOIN category C ON T.category_id = C.c_id "
 				+ "LEFT JOIN wallet W ON T.wallet_id = W.w_id";
 
-		try { 
+		try {
 			Connection connection = DbHelper.connection();
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);

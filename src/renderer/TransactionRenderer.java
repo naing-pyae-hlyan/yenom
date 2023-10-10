@@ -8,7 +8,6 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.text.DecimalFormat;
 import java.util.Date;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -16,7 +15,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
-
 import database.TransactionModel;
 import database.WalletModel;
 import utils.MyColors;
@@ -28,7 +26,6 @@ public class TransactionRenderer extends JPanel implements ListCellRenderer<Tran
 	private static final long serialVersionUID = 1L;
 
 	private final java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("E, MMM dd, yyyy hh:mm a");
-	private final DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
 	private JLabel lblDate;
 	private JLabel lblWalletName;
@@ -74,7 +71,7 @@ public class TransactionRenderer extends JPanel implements ListCellRenderer<Tran
 		lblWalletName.setText(value.getWalletModel().getName());
 		lblCategoryName.setText("	->	" + value.getCategoryModel().getName());
 
-		String amount = decimalFormat.format(value.getAmount());
+		String amount = String.format("%.2f", value.getAmount());
 		if (value.getCategoryModel().isIncome()) {
 			amount = "+" + amount;
 		} else {

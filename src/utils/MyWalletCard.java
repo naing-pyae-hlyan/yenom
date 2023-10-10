@@ -14,8 +14,6 @@ public class MyWalletCard extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final DecimalFormat decimalFormat = new DecimalFormat("0.00");
-
 	/**
 	 * Create the panel.
 	 */
@@ -40,7 +38,8 @@ public class MyWalletCard extends JPanel {
 		lblWallet.setForeground(Color.white);
 		walletPanel.add(lblWallet, BorderLayout.WEST);
 
-		JLabel lblAmount = new JLabel("+100000");
+		final String formattedTotalAmount = String.format("%.2f", (wm.getTotalIncome() - wm.getTotalExpense()));
+		JLabel lblAmount = new JLabel(formattedTotalAmount);
 		lblAmount.setFont(new Font("Default", Font.PLAIN, 18));
 		lblAmount.setForeground(Color.white);
 		walletPanel.add(lblAmount, BorderLayout.EAST);
@@ -73,14 +72,14 @@ public class MyWalletCard extends JPanel {
 		valuePanel.setLayout(new BorderLayout());
 		valuePanel.setBackground(Color.darkGray);
 
-		final String totalIncome = decimalFormat.format(wm.getTotalIncome());
-		JLabel lblIncomeAmount = new JLabel(totalIncome);
+		final String formattedTotalIncome = String.format("%.2f", wm.getTotalIncome());
+		JLabel lblIncomeAmount = new JLabel(formattedTotalIncome);
 		lblIncomeAmount.setFont(new Font("Default", Font.PLAIN, 13));
 		lblIncomeAmount.setForeground(Color.white);
 		valuePanel.add(lblIncomeAmount, BorderLayout.WEST);
 
-		final String totalExpense = decimalFormat.format(wm.getTotalExpense());
-		JLabel lblExpenseAmount = new JLabel(totalExpense);
+		final String formattedTotalExpense = String.format("%.2f", wm.getTotalExpense());
+		JLabel lblExpenseAmount = new JLabel(formattedTotalExpense);
 		lblExpenseAmount.setFont(new Font("Default", Font.PLAIN, 13));
 		lblExpenseAmount.setForeground(Color.red);
 		valuePanel.add(lblExpenseAmount, BorderLayout.EAST);
